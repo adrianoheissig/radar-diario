@@ -1,13 +1,13 @@
 {
-  "gerado_em": "2026-09-16T14:03:46-03:00",
+  "gerado_em": "2026-09-16T14:04:51-03:00",
   "data": "2026-09-16",
   "fiis": [
     {
       "ticker": "KNRI11",
-      "preco": 157.59,
-      "variacao_dia_pct": -0.56,
-      "variacao_30d_pct": 5.68,
-      "cotado_em": "2026-09-16T13:48:45-03:00",
+      "preco": 157.49,
+      "variacao_dia_pct": -0.62,
+      "variacao_30d_pct": 5.61,
+      "cotado_em": "2026-09-16T13:49:41-03:00",
       "fonte": "yahoo"
     },
     {
@@ -15,7 +15,7 @@
       "preco": 147.28,
       "variacao_dia_pct": -0.55,
       "variacao_30d_pct": 1.5,
-      "cotado_em": "2026-09-16T13:48:45-03:00",
+      "cotado_em": "2026-09-16T13:49:47-03:00",
       "fonte": "yahoo"
     },
     {
@@ -23,23 +23,23 @@
       "preco": 101.6,
       "variacao_dia_pct": 0.4,
       "variacao_30d_pct": 0.75,
-      "cotado_em": "2026-09-16T13:48:46-03:00",
+      "cotado_em": "2026-09-16T13:49:49-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "CPTS11",
-      "preco": 7.38,
-      "variacao_dia_pct": -0.27,
-      "variacao_30d_pct": 1.1,
-      "cotado_em": "2026-09-16T13:48:45-03:00",
+      "preco": 7.39,
+      "variacao_dia_pct": -0.14,
+      "variacao_30d_pct": 1.23,
+      "cotado_em": "2026-09-16T13:49:49-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "PVBI11",
-      "preco": 66.59,
-      "variacao_dia_pct": -1.2,
-      "variacao_30d_pct": 4.06,
-      "cotado_em": "2026-09-16T13:48:42-03:00",
+      "preco": 66.6,
+      "variacao_dia_pct": -1.19,
+      "variacao_30d_pct": 4.08,
+      "cotado_em": "2026-09-16T13:49:45-03:00",
       "fonte": "yahoo"
     },
     {
@@ -47,7 +47,7 @@
       "preco": 105.95,
       "variacao_dia_pct": -0.07,
       "variacao_30d_pct": 0.67,
-      "cotado_em": "2026-09-16T13:48:46-03:00",
+      "cotado_em": "2026-09-16T13:49:50-03:00",
       "fonte": "yahoo"
     },
     {
@@ -55,23 +55,23 @@
       "preco": 66.96,
       "variacao_dia_pct": 0.32,
       "variacao_30d_pct": 3.02,
-      "cotado_em": "2026-09-16T13:48:44-03:00",
+      "cotado_em": "2026-09-16T13:49:46-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "BTLG11",
-      "preco": 99.84,
-      "variacao_dia_pct": 0.35,
-      "variacao_30d_pct": 1.56,
-      "cotado_em": "2026-09-16T13:48:44-03:00",
+      "preco": 99.81,
+      "variacao_dia_pct": 0.32,
+      "variacao_30d_pct": 1.53,
+      "cotado_em": "2026-09-16T13:49:51-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "CPTI11",
-      "preco": 83.73,
-      "variacao_dia_pct": 0.17,
-      "variacao_30d_pct": 3.63,
-      "cotado_em": "2026-09-16T13:48:46-03:00",
+      "preco": 83.8,
+      "variacao_dia_pct": 0.25,
+      "variacao_30d_pct": 3.71,
+      "cotado_em": "2026-09-16T13:49:42-03:00",
       "fonte": "yahoo"
     }
   ],
@@ -170,28 +170,28 @@
         "BRAPI_TOKEN não definido: brapi sem token só atende ativos de teste",
         "brapi desativada nesta execução: Token de autenticação não fornecido"
       ],
-      "duracao_s": 1.81
+      "duracao_s": 0.6
     },
     "infomoney_manchetes": {
       "ok": true,
       "erro": null,
       "origem": "rss tudo-sobre/fundos-imobiliarios",
       "avisos": [],
-      "duracao_s": 0.08
+      "duracao_s": 0.6
     },
     "medium": {
       "ok": true,
       "erro": null,
       "origem": "rss",
       "avisos": [],
-      "duracao_s": 1.09
+      "duracao_s": 0.44
     },
     "corrida_no_ar": {
       "ok": true,
       "erro": null,
       "origem": "feed /feed",
       "avisos": [],
-      "duracao_s": 0.07
+      "duracao_s": 1.07
     }
   }
 }
