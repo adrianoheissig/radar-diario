@@ -1,0 +1,33 @@
+name: radar-diario
+
+services:
+  # Roda o coletor uma vez e grava em docs/data/
+  #   docker compose run --rm coletor
+  coletor:
+    build: .
+    profiles: [tarefas]
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./collector:/app/collector
+      - ./docs/data:/app/docs/data
+
+  # Testes automatizados (offline)
+  #   docker compose run --rm testes
+  testes:
+    build: .
+    profiles: [tarefas]
+    command: ["pytest", "-q"]
+    volumes:
+      - ./collector:/app/collector
+      - ./tests:/app/tests
+
+  # Serve o painel como o GitHub Pages faria
+  #   docker compose up -d web  ->  http://localhost:8080
+  web:
+    image: nginx:1.29-alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docs:/usr/share/nginx/html:ro

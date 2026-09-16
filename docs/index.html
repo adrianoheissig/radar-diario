@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="description" content="Resumo diário de FIIs, notícias e leituras.">
+  <title>Radar Diário</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    try {
+      const tema = localStorage.getItem("radar-tema");
+      if (tema) document.documentElement.dataset.theme = tema;
+    } catch (_) {}
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.5.42/dist/vue.global.prod.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <header class="topo">
+      <div class="topo-linha">
+        <h1><span aria-hidden="true">📡</span> Radar Diário</h1>
+        <button class="botao-icone" type="button" @click="alternarTema"
+                :aria-label="tema === 'dark' ? 'Usar tema claro' : 'Usar tema escuro'">
+          {{ tema === 'dark' ? '☀️' : '🌙' }}
+        </button>
+      </div>
+
+      <nav class="seletor-data" aria-label="Escolher data">
+        <button type="button" class="botao-icone" @click="mover(1)" :disabled="!temMaisAntigo" aria-label="Dia anterior">‹</button>
+        <select :value="dataAtual" @change="irPara($event.target.value)" :disabled="!datas.length" aria-label="Data do resumo">
+          <option v-if="!datas.length" :value="dataAtual">{{ dataAtual ? formatarData(dataAtual) : '—' }}</option>
+          <option v-for="d in datas" :key="d" :value="d">{{ formatarData(d) }}</option>
+        </select>
+        <button type="button" class="botao-icone" @click="mover(-1)" :disabled="!temMaisNovo" aria-label="Próximo dia">›</button>
+      </nav>
+
+      <p v-if="resumo" class="gerado">Gerado em {{ formatarDataHora(resumo.gerado_em) }}</p>
+    </header>
+
+    <main>
+      <p v-if="carregando" class="estado">Carregando…</p>
+      <p v-else-if="erroCarga" class="estado estado-erro">{{ erroCarga }}</p>
+
+      <template v-else-if="resumo">
+        <!-- FIIs -->
+        <section class="card card-fiis">
+          <header class="card-topo">
+            <h2>FIIs</h2>
+            <span class="origem" v-if="st('fiis').origem">{{ st('fiis').origem }}</span>
+          </header>
+          <status-fonte :status="st('fiis')"></status-fonte>
+          <table v-if="resumo.fiis.length" class="tabela-fiis">
+            <thead>
+              <tr><th>Ticker</th><th>Preço</th><th>Dia</th><th>30d</th></tr>
+            </thead>
+            <tbody>
+              <tr v-for="f in resumo.fiis" :key="f.ticker">
+                <td>
+                  <a :href="'https://statusinvest.com.br/fundos-imobiliarios/' + f.ticker.toLowerCase()" target="_blank" rel="noopener">{{ f.ticker }}</a>
+                </td>
+                <td :title="f.cotado_em ? 'Cotado em ' + formatarDataHora(f.cotado_em) + ' (' + f.fonte + ')' : ''">{{ formatarPreco(f.preco) }}</td>
+                <td :class="classeVariacao(f.variacao_dia_pct)">{{ formatarPct(f.variacao_dia_pct) }}</td>
+                <td :class="classeVariacao(f.variacao_30d_pct)">{{ formatarPct(f.variacao_30d_pct) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- InfoMoney -->
+        <section class="card">
+          <header class="card-topo">
+            <h2>InfoMoney · FIIs</h2>
+          </header>
+          <status-fonte :status="st('infomoney_manchetes')"></status-fonte>
+          <ul class="lista">
+            <li v-for="m in resumo.infomoney_manchetes" :key="m.link">
+              <a :href="m.link" target="_blank" rel="noopener">{{ m.titulo }}</a>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Medium -->
+        <section class="card">
+          <header class="card-topo">
+            <h2>Medium</h2>
+          </header>
+          <status-fonte :status="st('medium')"></status-fonte>
+          <ul class="lista">
+            <li v-for="m in resumo.medium" :key="m.link">
+              <a :href="m.link" target="_blank" rel="noopener">{{ m.titulo }}</a>
+              <span class="meta">
+                <span class="tag">#{{ m.tag }}</span>
+                <span v-if="m.autor">{{ m.autor }}</span>
+                <time v-if="m.publicado_em" :datetime="m.publicado_em" :title="formatarDataHora(m.publicado_em)">{{ tempoRelativo(m.publicado_em) }}</time>
+              </span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Corrida no Ar -->
+        <section class="card">
+          <header class="card-topo">
+            <h2>Corrida no Ar</h2>
+          </header>
+          <status-fonte :status="st('corrida_no_ar')"></status-fonte>
+          <article v-if="resumo.corrida_no_ar" class="post">
+            <h3><a :href="resumo.corrida_no_ar.link" target="_blank" rel="noopener">{{ resumo.corrida_no_ar.titulo }}</a></h3>
+            <time v-if="resumo.corrida_no_ar.publicado_em" class="meta" :datetime="resumo.corrida_no_ar.publicado_em">
+              {{ formatarDataHora(resumo.corrida_no_ar.publicado_em) }} · {{ tempoRelativo(resumo.corrida_no_ar.publicado_em) }}
+            </time>
+            <p v-if="resumo.corrida_no_ar.resumo">{{ resumo.corrida_no_ar.resumo }}</p>
+          </article>
+        </section>
+      </template>
+    </main>
+
+    <footer class="rodape">
+      Dados coletados automaticamente via GitHub Actions. Não é recomendação de investimento.
+    </footer>
+  </div>
+</body>
+</html>

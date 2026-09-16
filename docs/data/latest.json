@@ -1,0 +1,197 @@
+{
+  "gerado_em": "2026-09-16T14:03:46-03:00",
+  "data": "2026-09-16",
+  "fiis": [
+    {
+      "ticker": "KNRI11",
+      "preco": 157.59,
+      "variacao_dia_pct": -0.56,
+      "variacao_30d_pct": 5.68,
+      "cotado_em": "2026-09-16T13:48:45-03:00",
+      "fonte": "yahoo"
+    },
+    {
+      "ticker": "HGLG11",
+      "preco": 147.28,
+      "variacao_dia_pct": -0.55,
+      "variacao_30d_pct": 1.5,
+      "cotado_em": "2026-09-16T13:48:45-03:00",
+      "fonte": "yahoo"
+    },
+    {
+      "ticker": "XPML11",
+      "preco": 101.6,
+      "variacao_dia_pct": 0.4,
+      "variacao_30d_pct": 0.75,
+      "cotado_em": "2026-09-16T13:48:46-03:00",
+      "fonte": "yahoo"
+    },
+    {
+      "ticker": "CPTS11",
+      "preco": 7.38,
+      "variacao_dia_pct": -0.27,
+      "variacao_30d_pct": 1.1,
+      "cotado_em": "2026-09-16T13:48:45-03:00",
+      "fonte": "yahoo"
+    },
+    {
+      "ticker": "PVBI11",
+      "preco": 66.59,
+      "variacao_dia_pct": -1.2,
+      "variacao_30d_pct": 4.06,
+      "cotado_em": "2026-09-16T13:48:42-03:00",
+      "fonte": "yahoo"
+    },
+    {
+      "ticker": "KNCR11",
+      "preco": 105.95,
+      "variacao_dia_pct": -0.07,
+      "variacao_30d_pct": 0.67,
+      "cotado_em": "2026-09-16T13:48:46-03:00",
+      "fonte": "yahoo"
+    },
+    {
+      "ticker": "VCJR11",
+      "preco": 66.96,
+      "variacao_dia_pct": 0.32,
+      "variacao_30d_pct": 3.02,
+      "cotado_em": "2026-09-16T13:48:44-03:00",
+      "fonte": "yahoo"
+    },
+    {
+      "ticker": "BTLG11",
+      "preco": 99.84,
+      "variacao_dia_pct": 0.35,
+      "variacao_30d_pct": 1.56,
+      "cotado_em": "2026-09-16T13:48:44-03:00",
+      "fonte": "yahoo"
+    },
+    {
+      "ticker": "CPTI11",
+      "preco": 83.73,
+      "variacao_dia_pct": 0.17,
+      "variacao_30d_pct": 3.63,
+      "cotado_em": "2026-09-16T13:48:46-03:00",
+      "fonte": "yahoo"
+    }
+  ],
+  "infomoney_manchetes": [
+    {
+      "titulo": "Ofertas no mercado de capitais recuam 16% em um ano, aponta Anbima",
+      "link": "https://www.infomoney.com.br/onde-investir/ofertas-no-mercado-de-capitais-recuam-16-um-ano-aponta-anbima/"
+    },
+    {
+      "titulo": "O boom dos FIIs: quais os acertos da indústria — e os erros no caminho?",
+      "link": "https://www.infomoney.com.br/onde-investir/o-boom-dos-fiis-quais-os-acertos-da-industria-e-os-erros-no-caminho/"
+    },
+    {
+      "titulo": "FIIs no vermelho? Veja quando manter, comprar mais ou vender",
+      "link": "https://www.infomoney.com.br/onde-investir/fiis-no-vermelho-manter-comprar-mais-ou-vender/"
+    },
+    {
+      "titulo": "FII XPML11 aprova nova emissão de até R$ 800 milhões para investir em novos ativos",
+      "link": "https://www.infomoney.com.br/onde-investir/fii-xpml11-aprova-nova-emissao-de-ate-r-800-milhoes-para-investir-em-novos-ativos/"
+    },
+    {
+      "titulo": "FII TRXF11 anuncia compra de dois ativos corporativos em SP por R$ 340,3 milhões",
+      "link": "https://www.infomoney.com.br/onde-investir/fii-trxf11-anuncia-compra-de-dois-ativos-corporativos-em-sp-por-r-3403-milhoes/"
+    }
+  ],
+  "medium": [
+    {
+      "titulo": "Frontier Models in 2026: A Practical Field Guide for Builders and Researchers",
+      "link": "https://medium.com/@markjenkins_49263/frontier-models-in-2026-a-practical-field-guide-for-builders-and-researchers-c7d4a1221b85",
+      "autor": "Mark Jenkins",
+      "tag": "artificial-intelligence",
+      "publicado_em": "2026-09-16T14:02:46-03:00"
+    },
+    {
+      "titulo": "The Last AI Built by Humans? China, recursive self-improvement, and the realities of the AI race",
+      "link": "https://medium.com/@DrJosephBoland/the-last-ai-built-by-humans-china-recursive-self-improvement-and-the-realities-of-the-ai-race-879218858ed5",
+      "autor": "Joseph Boland",
+      "tag": "artificial-intelligence",
+      "publicado_em": "2026-09-16T14:01:56-03:00"
+    },
+    {
+      "titulo": "The Candidate Said “I Don’t Know” Three Times. We Hired Him Anyway.",
+      "link": "https://medium.com/@devrimcoder/the-candidate-said-i-dont-know-three-times-we-hired-him-anyway-d19a567ce3c6",
+      "autor": "Systems at Scale",
+      "tag": "software-engineering",
+      "publicado_em": "2026-09-16T14:01:48-03:00"
+    },
+    {
+      "titulo": "Mapping Domain-Driven Design Concepts to the Database With EF Core 10",
+      "link": "https://medium.com/@mariammaurice/mapping-domain-driven-design-concepts-to-the-database-with-ef-core-10-eabca27fc672",
+      "autor": "Mori",
+      "tag": "software-engineering",
+      "publicado_em": "2026-09-16T14:01:03-03:00"
+    },
+    {
+      "titulo": "Building self learning Orchestrated skill groups",
+      "link": "https://medium.com/@deepak.tiwari/i-spent-weeks-building-ai-skills-inside-a-chat-window-16418e4070a1",
+      "autor": "Deepak Tiwari",
+      "tag": "Claude",
+      "publicado_em": "2026-09-16T13:57:39-03:00"
+    },
+    {
+      "titulo": "Reporting Shouldn’t Be the Model’s Job",
+      "link": "https://medium.com/@tecnonest/reporting-shouldnt-be-the-model-s-job-c5660ec2d706",
+      "autor": "TecnoNest",
+      "tag": "Claude",
+      "publicado_em": "2026-09-16T13:29:33-03:00"
+    },
+    {
+      "titulo": "How I Built and Shipped a Real App as a Solo Developer",
+      "link": "https://medium.com/@s2567k/how-i-built-and-shipped-a-real-app-as-a-solo-developer-d9c7910e315f",
+      "autor": "Simon | Full-Stack Dev",
+      "tag": "Vuejs",
+      "publicado_em": "2026-09-15T06:20:12-03:00"
+    },
+    {
+      "titulo": "How we migrated Freshworks’ critical monorepo tackling tech debts",
+      "link": "https://medium.com/@mariappan/how-we-migrated-freshworks-critical-monorepo-tackling-tech-debts-6080fd2cd85e",
+      "autor": "Mariappan",
+      "tag": "Vuejs",
+      "publicado_em": "2026-09-14T13:01:24-03:00"
+    }
+  ],
+  "corrida_no_ar": {
+    "titulo": "ATLETA é PEGA no DOPING na LIVE! 42K de BRASÍLIA",
+    "link": "https://corridanoar.com/atleta-e-pega-no-doping-na-live-42k-de-brasilia/",
+    "resumo": "Corredora da Live! 42k de Brasília é pega no doping. Inscrições abrem para a Maratona do Paraná 2027 e tem novidades sobre a corrida do Iron Maiden em SP. Também, atualização sobre o caso da atleta trans em Limeira e a revelação da medalha da Maratona de Chicago.",
+    "publicado_em": "2026-09-16T05:25:31-03:00"
+  },
+  "status": {
+    "fiis": {
+      "ok": true,
+      "erro": null,
+      "origem": "yahoo",
+      "avisos": [
+        "BRAPI_TOKEN não definido: brapi sem token só atende ativos de teste",
+        "brapi desativada nesta execução: Token de autenticação não fornecido"
+      ],
+      "duracao_s": 1.81
+    },
+    "infomoney_manchetes": {
+      "ok": true,
+      "erro": null,
+      "origem": "rss tudo-sobre/fundos-imobiliarios",
+      "avisos": [],
+      "duracao_s": 0.08
+    },
+    "medium": {
+      "ok": true,
+      "erro": null,
+      "origem": "rss",
+      "avisos": [],
+      "duracao_s": 1.09
+    },
+    "corrida_no_ar": {
+      "ok": true,
+      "erro": null,
+      "origem": "feed /feed",
+      "avisos": [],
+      "duracao_s": 0.07
+    }
+  }
+}
