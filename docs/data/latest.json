@@ -1,69 +1,69 @@
 {
-  "gerado_em": "2026-09-16T14:43:38-03:00",
+  "gerado_em": "2026-09-16T14:45:45-03:00",
   "data": "2026-09-16",
   "fiis": [
     {
       "ticker": "KNRI11",
-      "preco": 157.34,
-      "variacao_dia_pct": -0.71,
-      "variacao_30d_pct": 5.51,
-      "cotado_em": "2026-09-16T14:28:33-03:00",
+      "preco": 157.23,
+      "variacao_dia_pct": -0.78,
+      "variacao_30d_pct": 5.44,
+      "cotado_em": "2026-09-16T14:30:44-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "HGLG11",
-      "preco": 147.31,
+      "preco": 147.32,
       "variacao_dia_pct": -0.53,
       "variacao_30d_pct": 1.52,
-      "cotado_em": "2026-09-16T14:28:38-03:00",
+      "cotado_em": "2026-09-16T14:30:45-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "XPML11",
-      "preco": 101.6,
-      "variacao_dia_pct": 0.4,
-      "variacao_30d_pct": 0.75,
-      "cotado_em": "2026-09-16T14:28:36-03:00",
+      "preco": 101.62,
+      "variacao_dia_pct": 0.41,
+      "variacao_30d_pct": 0.77,
+      "cotado_em": "2026-09-16T14:30:40-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "CPTS11",
-      "preco": 7.39,
-      "variacao_dia_pct": -0.14,
-      "variacao_30d_pct": 1.23,
-      "cotado_em": "2026-09-16T14:28:37-03:00",
+      "preco": 7.38,
+      "variacao_dia_pct": -0.27,
+      "variacao_30d_pct": 1.1,
+      "cotado_em": "2026-09-16T14:30:44-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "PVBI11",
-      "preco": 66.6,
-      "variacao_dia_pct": -1.19,
-      "variacao_30d_pct": 4.08,
-      "cotado_em": "2026-09-16T14:28:33-03:00",
+      "preco": 66.58,
+      "variacao_dia_pct": -1.22,
+      "variacao_30d_pct": 4.05,
+      "cotado_em": "2026-09-16T14:30:41-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "KNCR11",
-      "preco": 105.9,
-      "variacao_dia_pct": -0.12,
-      "variacao_30d_pct": 0.63,
-      "cotado_em": "2026-09-16T14:28:33-03:00",
+      "preco": 105.91,
+      "variacao_dia_pct": -0.11,
+      "variacao_30d_pct": 0.64,
+      "cotado_em": "2026-09-16T14:30:39-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "VCJR11",
-      "preco": 67.02,
-      "variacao_dia_pct": 0.4,
-      "variacao_30d_pct": 3.11,
-      "cotado_em": "2026-09-16T14:26:25-03:00",
+      "preco": 67.01,
+      "variacao_dia_pct": 0.39,
+      "variacao_30d_pct": 3.09,
+      "cotado_em": "2026-09-16T14:28:44-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "BTLG11",
-      "preco": 99.73,
-      "variacao_dia_pct": 0.24,
-      "variacao_30d_pct": 1.44,
-      "cotado_em": "2026-09-16T14:28:33-03:00",
+      "preco": 99.75,
+      "variacao_dia_pct": 0.26,
+      "variacao_30d_pct": 1.46,
+      "cotado_em": "2026-09-16T14:30:38-03:00",
       "fonte": "yahoo"
     },
     {
@@ -71,7 +71,7 @@
       "preco": 83.75,
       "variacao_dia_pct": 0.19,
       "variacao_30d_pct": 3.65,
-      "cotado_em": "2026-09-16T14:28:34-03:00",
+      "cotado_em": "2026-09-16T14:30:30-03:00",
       "fonte": "yahoo"
     }
   ],
@@ -262,31 +262,38 @@
       "erro": null,
       "origem": "yahoo",
       "avisos": [
-        "BRAPI_TOKEN não definido: brapi sem token só atende ativos de teste",
-        "brapi desativada nesta execução: Token de autenticação não fornecido"
+        "KNRI11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
+        "HGLG11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
+        "XPML11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
+        "CPTS11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
+        "PVBI11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
+        "KNCR11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
+        "VCJR11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
+        "BTLG11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
+        "CPTI11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'"
       ],
-      "duracao_s": 0.65
+      "duracao_s": 0.94
     },
     "infomoney_manchetes": {
       "ok": true,
       "erro": null,
       "origem": "rss tudo-sobre/fundos-imobiliarios",
       "avisos": [],
-      "duracao_s": 0.24
+      "duracao_s": 0.99
     },
     "medium": {
       "ok": true,
       "erro": null,
       "origem": "rss",
       "avisos": [],
-      "duracao_s": 2.96
+      "duracao_s": 2.83
     },
     "corrida_no_ar": {
       "ok": true,
       "erro": null,
       "origem": "feed /feed",
       "avisos": [],
-      "duracao_s": 0.78
+      "duracao_s": 1.21
     }
   }
 }
