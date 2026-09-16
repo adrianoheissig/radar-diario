@@ -103,6 +103,16 @@ def texto_de_html(html: str) -> str:
     return re.sub(r"\s+", " ", texto).strip()
 
 
+_RODAPE_TEXTO = re.compile(
+    r"\s*(The post|O post)\b.*?(appeared first on|first appeared on|apareceu primeiro em)\b.*$", re.I | re.S
+)
+
+
+def resumo_de_html(html: str, limite: int) -> str:
+    """Texto puro do HTML, sem o rodapé "The post ... appeared first on" e truncado."""
+    return truncar(_RODAPE_TEXTO.sub("", texto_de_html(html)), limite)
+
+
 def truncar(texto: str, limite: int) -> str:
     if len(texto) <= limite:
         return texto

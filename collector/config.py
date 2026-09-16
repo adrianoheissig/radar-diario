@@ -19,6 +19,8 @@ MEDIUM_TAGS = ["Claude", "Vuejs", "artificial-intelligence", "software-engineeri
 MEDIUM_FEED_URL = "https://medium.com/feed/tag/{tag}"
 # Quantos itens mais recentes pegar de cada tag (evita que tags com muito volume dominem).
 MEDIUM_POR_TAG = 2
+# Busca o texto completo no feed do autor/publicação (1 requisição extra por feed).
+MEDIUM_TEXTO_COMPLETO = True
 
 # 2. Corrida no Ar
 CORRIDA_NO_AR_URL = "https://corridanoar.com"
@@ -32,6 +34,8 @@ CORRIDA_NO_AR_RESUMO_MAX = 280
 INFOMONEY_FII_FEED = "https://www.infomoney.com.br/tudo-sobre/fundos-imobiliarios/feed/"
 INFOMONEY_FII_URL = "https://www.infomoney.com.br/cotacoes/b3/fii/"
 INFOMONEY_LIMITE = 5
+INFOMONEY_RESUMO_MAX = 400
+INFOMONEY_MAX_CATEGORIAS = 4
 
 # 4. Cotações dos FIIs
 FIIS = ["KNRI11", "HGLG11", "XPML11", "CPTS11", "PVBI11", "KNCR11", "VCJR11", "BTLG11", "CPTI11"]

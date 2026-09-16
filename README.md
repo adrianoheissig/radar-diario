@@ -3,9 +3,11 @@
 Painel pessoal publicado no **GitHub Pages** que mostra, toda manhã, um resumo com:
 
 - cotações dos meus **FIIs** (preço, variação do dia e de 30 dias);
-- manchetes de **FIIs da InfoMoney**;
-- artigos recentes do **Medium** (os mais novos de cada tag);
-- a última publicação do **Corrida no Ar**.
+- manchetes de **FIIs da InfoMoney** com resumo, autor, categorias e a matéria completa;
+- artigos recentes do **Medium** (os mais novos de cada tag), com o texto completo para ler no painel;
+- a última publicação do **Corrida no Ar**, completa.
+
+Cada fonte fica em uma aba. Textos longos abrem e fecham com um botão, sem sair do painel.
 
 Sem backend e sem banco: um script Python roda no GitHub Actions, grava JSON em `docs/data/` e faz commit. O GitHub Pages serve a pasta `docs/`.
 
@@ -28,6 +30,7 @@ GitHub Pages (main /docs)
 ├── collector/
 │   ├── config.py          # tags, tickers, URLs  ← personalize aqui
 │   ├── comum.py           # HTTP com retry, datas, feeds
+│   ├── html_limpo.py      # limpeza + sanitização (nh3) do HTML completo
 │   ├── main.py            # orquestra as fontes e grava os JSONs
 │   └── fontes/
 │       ├── fiis.py        # brapi.dev (+ fallback Yahoo Finance)
@@ -35,7 +38,7 @@ GitHub Pages (main /docs)
 │       ├── medium.py      # feeds RSS por tag
 │       └── corrida_no_ar.py  # feed RSS (+ fallback scraping da home)
 ├── docs/                  # site do GitHub Pages
-│   ├── index.html  app.js  style.css
+│   ├── index.html  app.js  style.css   # Vue 3 + DOMPurify via CDN
 │   └── data/              # JSONs gerados pelo coletor
 ├── tests/                 # testes offline (pytest)
 ├── Dockerfile  docker-compose.yml
@@ -48,13 +51,13 @@ Pré-requisito: Docker com Compose v2.
 
 ```bash
 cp .env.example .env          # opcional: preencha BRAPI_TOKEN
-docker compose build
+docker compose build coletor testes
 docker compose run --rm coletor   # coleta e grava em docs/data/
 docker compose run --rm testes    # testes offline
 docker compose up -d web          # painel em http://localhost:8080
 ```
 
-`collector/` e `docs/` são montados como volume, então dá para editar o código sem rebuild (só rode `docker compose build` se mudar `requirements*.txt`).
+`collector/` e `docs/` são montados como volume, então dá para editar o código sem rebuild (só rode `docker compose build coletor testes` se mudar `requirements*.txt`).
 
 Parar o painel: `docker compose down`.
 
@@ -99,9 +102,9 @@ Observações:
 | Fonte | Principal | Fallback |
 |---|---|---|
 | FIIs | `brapi.dev/api/quote/{ticker}?range=1mo` (com `BRAPI_TOKEN`) | Yahoo Finance `v8/finance/chart/{ticker}.SA` |
-| InfoMoney | RSS `infomoney.com.br/tudo-sobre/fundos-imobiliarios/feed/` | scraping da seção "Últimas notícias sobre FIIs" em `/cotacoes/b3/fii/` |
-| Medium | RSS `medium.com/feed/tag/{tag}`: os `MEDIUM_POR_TAG` mais recentes de cada tag, deduplicados pelo guid e ordenados por data | tags que falham viram aviso; as outras seguem |
-| Corrida no Ar | RSS em `/feed`, `/rss`, `/feed.xml` | autodescoberta via `<link rel="alternate">` e scraping do 1º post da home |
+| InfoMoney | RSS `infomoney.com.br/tudo-sobre/fundos-imobiliarios/feed/` (resumo, autor, categorias, imagem e matéria completa via `content:encoded`) | scraping da seção "Últimas notícias sobre FIIs" em `/cotacoes/b3/fii/` (só título e link) |
+| Medium | RSS `medium.com/feed/tag/{tag}`: os `MEDIUM_POR_TAG` mais recentes de cada tag, deduplicados pelo guid. Texto completo buscado no feed do autor/publicação | sem texto completo (exclusivo para membros ou fora do feed do autor): fica o trecho + link; tags que falham viram aviso |
+| Corrida no Ar | RSS em `/feed`, `/rss`, `/feed.xml` (post completo via `content:encoded`) | autodescoberta via `<link rel="alternate">` e scraping do 1º post da home (só resumo) |
 
 Detalhes:
 
@@ -109,6 +112,16 @@ Detalhes:
 - **InfoMoney**: a seção de notícias da página de cotações costuma estar desatualizada (em set/2026 trazia só 4 notícias, de um mês antes). Por isso o feed da tag é a fonte principal.
 - **Yahoo** responde 429 para User-Agent de navegador completo sem cookies. Por isso ele usa um UA curto (`YAHOO_USER_AGENT` em `config.py`).
 - A variação de 30 dias compara o preço atual com o último fechamento de 30 dias atrás ou antes.
+- **Medium, texto completo**: o feed de tag só traz um trecho. O coletor lê o feed do autor (`medium.com/feed/@autor`), da publicação (`medium.com/feed/publicacao`) ou do domínio próprio (`blog.exemplo.com/feed`) e localiza o post pelo guid. Desligue com `MEDIUM_TEXTO_COMPLETO = False`.
+
+## Conteúdo completo e segurança
+
+O HTML dos artigos vem de sites de terceiros e é exibido dentro do painel, então passa por duas camadas:
+
+1. **Coletor** ([`collector/html_limpo.py`](collector/html_limpo.py)): remove rodapés de feed, pixels de rastreamento, botões de compartilhamento e blocos vazios, resolve URLs relativas e aplica allowlist com [nh3](https://github.com/messense/nh3). Ficam só tags de texto, listas, código, tabelas, imagens e links. Scripts, estilos, iframes e atributos de evento são removidos.
+2. **Navegador**: [DOMPurify](https://github.com/cure53/DOMPurify) sanitiza de novo antes do `v-html`, e todos os links abrem em nova aba com `rel="noopener noreferrer"`.
+
+Com o conteúdo completo, cada resumo diário fica com ~130 KB (cerca de 50 MB por ano de histórico em `docs/data/`).
 
 ## Tratamento de erros
 
@@ -127,12 +140,19 @@ O painel mostra falhas e avisos no card de cada fonte.
   "gerado_em": "2026-09-16T06:00:12-03:00",
   "data": "2026-09-16",
   "fiis": [
-    {"ticker": "KNRI11", "preco": 157.54, "variacao_dia_pct": -0.59, "variacao_30d_pct": 5.65,
+    {"ticker": "KNRI11", "preco": 157.6, "variacao_dia_pct": -0.55, "variacao_30d_pct": 5.69,
      "cotado_em": "2026-09-15T18:07:00-03:00", "fonte": "brapi"}
   ],
-  "infomoney_manchetes": [{"titulo": "...", "link": "https://..."}],
-  "medium": [{"titulo": "...", "link": "...", "autor": "...", "tag": "Claude", "publicado_em": "ISO-8601"}],
-  "corrida_no_ar": {"titulo": "...", "link": "...", "resumo": "...", "publicado_em": "ISO-8601"},
+  "infomoney_manchetes": [
+    {"titulo": "...", "link": "https://...", "resumo": "...", "autor": "...", "publicado_em": "ISO-8601",
+     "categorias": ["FIIs", "XPML11"], "imagem": "https://...", "conteudo_html": "<p>...</p>", "leitura_min": 3}
+  ],
+  "medium": [
+    {"titulo": "...", "link": "...", "autor": "...", "tag": "Claude", "publicado_em": "ISO-8601",
+     "resumo": "trecho", "imagem": "https://...", "conteudo_html": "<p>...</p> ou null", "leitura_min": 7}
+  ],
+  "corrida_no_ar": {"titulo": "...", "link": "...", "resumo": "...", "publicado_em": "ISO-8601",
+                    "imagem": "https://...", "conteudo_html": "<p>...</p>", "leitura_min": 3},
   "status": {
     "fiis": {"ok": true, "erro": null, "origem": "brapi", "avisos": [], "duracao_s": 1.8}
     // ... uma entrada por fonte
@@ -140,7 +160,7 @@ O painel mostra falhas e avisos no card de cada fonte.
 }
 ```
 
-`cotado_em`, `fonte`, `data` e `status` são extras em relação ao schema mínimo. `index.json`:
+Os campos além do schema mínimo original (`data`, `status`, `cotado_em`, `fonte`, `resumo`, `imagem`, `conteudo_html`, `leitura_min` etc.) podem ser `null` quando a fonte não fornece; o painel trata isso. `conteudo_html` já vem sanitizado. `index.json`:
 
 ```json
 {"atualizado_em": "2026-09-16T06:00:14-03:00", "datas": ["2026-09-16", "2026-09-15"]}
@@ -148,6 +168,6 @@ O painel mostra falhas e avisos no card de cada fonte.
 
 ## Personalização
 
-Tudo em [`collector/config.py`](collector/config.py): `MEDIUM_TAGS`, `MEDIUM_POR_TAG`, `FIIS`, `INFOMONEY_LIMITE`, `FII_FALLBACK_YAHOO` etc.
+Tudo em [`collector/config.py`](collector/config.py): `MEDIUM_TAGS`, `MEDIUM_POR_TAG`, `MEDIUM_TEXTO_COMPLETO`, `FIIS`, `INFOMONEY_LIMITE`, `INFOMONEY_RESUMO_MAX`, `FII_FALLBACK_YAHOO` etc.
 
-No painel, a data escolhida fica na URL (`#2026-09-15`) e o tema claro/escuro é lembrado no navegador.
+No painel, a aba e a data ficam na URL (`#medium`, `#2026-09-15/corrida`), então dá para salvar atalhos. O tema claro/escuro é lembrado no navegador.

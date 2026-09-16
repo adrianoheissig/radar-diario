@@ -1,4 +1,4 @@
-"""Corrida no Ar: última publicação via feed RSS, com scraping da home como fallback."""
+"""Corrida no Ar: última publicação completa via feed RSS, com scraping da home como fallback."""
 
 from __future__ import annotations
 
@@ -17,13 +17,9 @@ from collector.comum import (
     get,
     iso,
     limpar_url,
-    texto_de_html,
-    truncar,
+    resumo_de_html,
 )
-
-_RODAPE_WORDPRESS = re.compile(
-    r"\s*(The post|O post)\b.*?(appeared first on|first appeared on|apareceu primeiro em)\b.*$", re.I | re.S
-)
+from collector.html_limpo import conteudo_da_entrada, limpar_conteudo, minutos_leitura
 
 
 def coletar() -> Resultado:
@@ -45,6 +41,7 @@ def coletar() -> Resultado:
     post = extrair_primeiro_post(home, base)
     if not post:
         raise ColetaErro("nenhum post encontrado (feed e scraping): " + "; ".join(avisos))
+    avisos.append("sem feed: conteúdo completo indisponível, só o resumo")
     return Resultado(post, origem="scraping home", avisos=avisos)
 
 
@@ -62,17 +59,35 @@ def _tentar_feed(url: str, avisos: list[str], rotulo: str) -> dict | None:
 
 def post_do_feed(entradas) -> dict:
     entrada = max(entradas, key=lambda e: data_da_entrada(e) or "")
+    link = limpar_url(entrada.get("link", ""))
+    conteudo = limpar_conteudo(conteudo_da_entrada(entrada), link, ajuste=_ajustar_html)
     return {
         "titulo": entrada.get("title", "").strip(),
-        "link": limpar_url(entrada.get("link", "")),
-        "resumo": limpar_resumo(entrada.get("summary", "")),
+        "link": link,
+        "resumo": resumo_de_html(entrada.get("summary", ""), config.CORRIDA_NO_AR_RESUMO_MAX),
         "publicado_em": data_da_entrada(entrada),
+        "imagem": _imagem(entrada),
+        "conteudo_html": conteudo,
+        "leitura_min": minutos_leitura(conteudo),
     }
 
 
-def limpar_resumo(html: str) -> str:
-    texto = _RODAPE_WORDPRESS.sub("", texto_de_html(html))
-    return truncar(texto, config.CORRIDA_NO_AR_RESUMO_MAX)
+def _ajustar_html(soup: BeautifulSoup) -> None:
+    # miniatura 150x150 do plugin de feed (a imagem destacada vai em "imagem")
+    for img in soup.select("img.webfeedsFeaturedVisual"):
+        img.decompose()
+    # botões de compartilhamento do AddToAny
+    for elemento in soup.select(".addtoany_share_save_container, .a2a_kit"):
+        elemento.decompose()
+    for a in soup.find_all("a", href=re.compile(r"addtoany\.com")):
+        a.decompose()
+
+
+def _imagem(entrada) -> str | None:
+    for midia in entrada.get("media_content") or []:
+        if midia.get("url") and midia.get("medium", "image") == "image":
+            return midia["url"]
+    return None
 
 
 def descobrir_feed(html: str, base: str) -> str | None:
@@ -102,7 +117,10 @@ def extrair_primeiro_post(html: str, base: str) -> dict | None:
         return {
             "titulo": ancora.get_text(" ", strip=True),
             "link": limpar_url(urljoin(base + "/", ancora["href"])),
-            "resumo": limpar_resumo(str(resumo)) if resumo else "",
+            "resumo": resumo_de_html(str(resumo), config.CORRIDA_NO_AR_RESUMO_MAX) if resumo else "",
             "publicado_em": publicado_em,
+            "imagem": None,
+            "conteudo_html": None,
+            "leitura_min": None,
         }
     return None

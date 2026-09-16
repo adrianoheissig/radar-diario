@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0d1117">
   <meta name="description" content="Resumo diário de FIIs, notícias e leituras.">
+  <meta name="referrer" content="no-referrer">
   <title>Radar Diário</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📡</text></svg>">
   <link rel="stylesheet" href="style.css">
@@ -15,6 +16,7 @@
     } catch (_) {}
   </script>
   <script src="https://cdn.jsdelivr.net/npm/vue@3.5.42/dist/vue.global.prod.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.15/dist/purify.min.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -30,15 +32,24 @@
 
       <nav class="seletor-data" aria-label="Escolher data">
         <button type="button" class="botao-icone" @click="mover(1)" :disabled="!temMaisAntigo" aria-label="Dia anterior">‹</button>
-        <select :value="dataAtual" @change="irPara($event.target.value)" :disabled="!datas.length" aria-label="Data do resumo">
+        <select :value="dataAtual" @change="irParaData($event.target.value)" :disabled="!datas.length" aria-label="Data do resumo">
           <option v-if="!datas.length" :value="dataAtual">{{ dataAtual ? formatarData(dataAtual) : '—' }}</option>
           <option v-for="d in datas" :key="d" :value="d">{{ formatarData(d) }}</option>
         </select>
         <button type="button" class="botao-icone" @click="mover(-1)" :disabled="!temMaisNovo" aria-label="Próximo dia">›</button>
       </nav>
-
       <p v-if="resumo" class="gerado">Gerado em {{ formatarDataHora(resumo.gerado_em) }}</p>
     </header>
+
+    <nav class="abas" ref="barraAbas" role="tablist" aria-label="Fontes">
+      <button v-for="a in abas" :key="a.id" type="button" role="tab" class="aba"
+              :id="'aba-' + a.id" :aria-selected="aba === a.id" :aria-controls="'painel-' + a.id"
+              @click="selecionarAba(a.id)">
+        {{ a.rotulo }}
+        <span v-if="resumo && st(a.fonte) && !st(a.fonte).ok" class="ponto-erro" title="Falha na coleta"></span>
+        <span v-else-if="contagem(a)" class="contador">{{ contagem(a) }}</span>
+      </button>
+    </nav>
 
     <main>
       <p v-if="carregando" class="estado">Carregando…</p>
@@ -46,10 +57,10 @@
 
       <template v-else-if="resumo">
         <!-- FIIs -->
-        <section class="card card-fiis">
+        <section v-if="aba === 'fiis'" id="painel-fiis" role="tabpanel" aria-labelledby="aba-fiis" class="card">
           <header class="card-topo">
             <h2>FIIs</h2>
-            <span class="origem" v-if="st('fiis').origem">{{ st('fiis').origem }}</span>
+            <span class="origem" v-if="st('fiis') && st('fiis').origem">{{ st('fiis').origem }}</span>
           </header>
           <status-fonte :status="st('fiis')"></status-fonte>
           <table v-if="resumo.fiis.length" class="tabela-fiis">
@@ -70,48 +81,73 @@
         </section>
 
         <!-- InfoMoney -->
-        <section class="card">
-          <header class="card-topo">
-            <h2>InfoMoney · FIIs</h2>
-          </header>
+        <section v-if="aba === 'infomoney'" id="painel-infomoney" role="tabpanel" aria-labelledby="aba-infomoney" class="painel">
           <status-fonte :status="st('infomoney_manchetes')"></status-fonte>
-          <ul class="lista">
-            <li v-for="m in resumo.infomoney_manchetes" :key="m.link">
-              <a :href="m.link" target="_blank" rel="noopener">{{ m.titulo }}</a>
-            </li>
-          </ul>
+          <article v-for="m in resumo.infomoney_manchetes" :key="m.link" :id="idItem('im', m.link)" class="card item">
+            <img v-if="m.imagem" class="miniatura" :src="m.imagem" alt="" loading="lazy">
+            <h3 class="item-titulo"><a :href="m.link" target="_blank" rel="noopener">{{ m.titulo }}</a></h3>
+            <p class="meta">
+              <span v-if="m.autor">{{ m.autor }}</span>
+              <time v-if="m.publicado_em" :datetime="m.publicado_em" :title="formatarDataHora(m.publicado_em)">{{ tempoRelativo(m.publicado_em) }}</time>
+              <span v-if="m.leitura_min">{{ m.leitura_min }} min de leitura</span>
+            </p>
+            <p v-if="m.resumo" class="resumo">{{ m.resumo }}</p>
+            <div v-if="m.categorias && m.categorias.length" class="chips">
+              <span v-for="c in m.categorias" :key="c" class="chip">{{ c }}</span>
+            </div>
+            <leitor v-if="m.conteudo_html" :html="m.conteudo_html" :link="m.link" fonte="InfoMoney"
+                    rotulo-abrir="Ler matéria completa" :aberto="estaAberto(m.link)"
+                    @alternar="alternar(m.link, 'im')"></leitor>
+          </article>
         </section>
 
         <!-- Medium -->
-        <section class="card">
-          <header class="card-topo">
-            <h2>Medium</h2>
-          </header>
+        <section v-if="aba === 'medium'" id="painel-medium" role="tabpanel" aria-labelledby="aba-medium" class="painel">
           <status-fonte :status="st('medium')"></status-fonte>
-          <ul class="lista">
-            <li v-for="m in resumo.medium" :key="m.link">
-              <a :href="m.link" target="_blank" rel="noopener">{{ m.titulo }}</a>
-              <span class="meta">
-                <span class="tag">#{{ m.tag }}</span>
-                <span v-if="m.autor">{{ m.autor }}</span>
-                <time v-if="m.publicado_em" :datetime="m.publicado_em" :title="formatarDataHora(m.publicado_em)">{{ tempoRelativo(m.publicado_em) }}</time>
-              </span>
-            </li>
-          </ul>
+          <div class="barra-filtros" v-if="resumo.medium.length">
+            <div class="chips chips-filtro" role="group" aria-label="Filtrar por tag">
+              <button type="button" class="chip" :aria-pressed="!filtroTag" @click="filtroTag = ''">Todas</button>
+              <button v-for="t in tagsMedium" :key="t" type="button" class="chip" :aria-pressed="filtroTag === t" @click="filtroTag = t">#{{ t }}</button>
+            </div>
+            <button type="button" class="botao-texto" @click="alternarTodosMedium">
+              {{ todosMediumAbertos ? 'Recolher todos' : 'Expandir todos' }}
+            </button>
+          </div>
+          <article v-for="m in mediumFiltrado" :key="m.link" :id="idItem('md', m.link)" class="card item">
+            <img v-if="m.imagem" class="miniatura" :src="m.imagem" alt="" loading="lazy">
+            <h3 class="item-titulo"><a :href="m.link" target="_blank" rel="noopener">{{ m.titulo }}</a></h3>
+            <p class="meta">
+              <span class="tag">#{{ m.tag }}</span>
+              <span v-if="m.autor">{{ m.autor }}</span>
+              <time v-if="m.publicado_em" :datetime="m.publicado_em" :title="formatarDataHora(m.publicado_em)">{{ tempoRelativo(m.publicado_em) }}</time>
+              <span v-if="m.leitura_min">{{ m.leitura_min }} min</span>
+            </p>
+            <p v-if="m.resumo && !estaAberto(m.link)" class="resumo">{{ m.resumo }}</p>
+            <leitor v-if="m.conteudo_html" :html="m.conteudo_html" :link="m.link" fonte="Medium"
+                    rotulo-abrir="Ler aqui" :aberto="estaAberto(m.link)"
+                    @alternar="alternar(m.link, 'md')"></leitor>
+            <p v-else class="indisponivel">
+              Texto completo indisponível (exclusivo para membros ou fora do feed do autor).
+              <a :href="m.link" target="_blank" rel="noopener">Ler no Medium ↗</a>
+            </p>
+          </article>
         </section>
 
         <!-- Corrida no Ar -->
-        <section class="card">
-          <header class="card-topo">
-            <h2>Corrida no Ar</h2>
-          </header>
+        <section v-if="aba === 'corrida'" id="painel-corrida" role="tabpanel" aria-labelledby="aba-corrida" class="painel">
           <status-fonte :status="st('corrida_no_ar')"></status-fonte>
-          <article v-if="resumo.corrida_no_ar" class="post">
-            <h3><a :href="resumo.corrida_no_ar.link" target="_blank" rel="noopener">{{ resumo.corrida_no_ar.titulo }}</a></h3>
-            <time v-if="resumo.corrida_no_ar.publicado_em" class="meta" :datetime="resumo.corrida_no_ar.publicado_em">
-              {{ formatarDataHora(resumo.corrida_no_ar.publicado_em) }} · {{ tempoRelativo(resumo.corrida_no_ar.publicado_em) }}
-            </time>
-            <p v-if="resumo.corrida_no_ar.resumo">{{ resumo.corrida_no_ar.resumo }}</p>
+          <article v-if="resumo.corrida_no_ar" class="card post-completo">
+            <img v-if="resumo.corrida_no_ar.imagem" class="capa" :src="resumo.corrida_no_ar.imagem" alt="" loading="lazy">
+            <h2 class="post-titulo">{{ resumo.corrida_no_ar.titulo }}</h2>
+            <p class="meta">
+              <time v-if="resumo.corrida_no_ar.publicado_em" :datetime="resumo.corrida_no_ar.publicado_em">
+                {{ formatarDataHora(resumo.corrida_no_ar.publicado_em) }} · {{ tempoRelativo(resumo.corrida_no_ar.publicado_em) }}
+              </time>
+              <span v-if="resumo.corrida_no_ar.leitura_min">{{ resumo.corrida_no_ar.leitura_min }} min de leitura</span>
+            </p>
+            <conteudo-seguro v-if="resumo.corrida_no_ar.conteudo_html" :html="resumo.corrida_no_ar.conteudo_html"></conteudo-seguro>
+            <p v-else-if="resumo.corrida_no_ar.resumo" class="resumo">{{ resumo.corrida_no_ar.resumo }}</p>
+            <p class="link-original"><a :href="resumo.corrida_no_ar.link" target="_blank" rel="noopener">Ver no Corrida no Ar ↗</a></p>
           </article>
         </section>
       </template>
