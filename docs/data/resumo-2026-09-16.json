@@ -1,29 +1,29 @@
 {
-  "gerado_em": "2026-09-16T14:45:45-03:00",
+  "gerado_em": "2026-09-16T14:47:37-03:00",
   "data": "2026-09-16",
   "fiis": [
     {
       "ticker": "KNRI11",
-      "preco": 157.23,
-      "variacao_dia_pct": -0.78,
-      "variacao_30d_pct": 5.44,
-      "cotado_em": "2026-09-16T14:30:44-03:00",
+      "preco": 157.15,
+      "variacao_dia_pct": -0.83,
+      "variacao_30d_pct": 5.38,
+      "cotado_em": "2026-09-16T14:32:31-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "HGLG11",
-      "preco": 147.32,
-      "variacao_dia_pct": -0.53,
-      "variacao_30d_pct": 1.52,
-      "cotado_em": "2026-09-16T14:30:45-03:00",
+      "preco": 147.3,
+      "variacao_dia_pct": -0.54,
+      "variacao_30d_pct": 1.51,
+      "cotado_em": "2026-09-16T14:32:29-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "XPML11",
-      "preco": 101.62,
-      "variacao_dia_pct": 0.41,
-      "variacao_30d_pct": 0.77,
-      "cotado_em": "2026-09-16T14:30:40-03:00",
+      "preco": 101.58,
+      "variacao_dia_pct": 0.38,
+      "variacao_30d_pct": 0.73,
+      "cotado_em": "2026-09-16T14:32:36-03:00",
       "fonte": "yahoo"
     },
     {
@@ -31,7 +31,7 @@
       "preco": 7.38,
       "variacao_dia_pct": -0.27,
       "variacao_30d_pct": 1.1,
-      "cotado_em": "2026-09-16T14:30:44-03:00",
+      "cotado_em": "2026-09-16T14:32:34-03:00",
       "fonte": "yahoo"
     },
     {
@@ -39,31 +39,31 @@
       "preco": 66.58,
       "variacao_dia_pct": -1.22,
       "variacao_30d_pct": 4.05,
-      "cotado_em": "2026-09-16T14:30:41-03:00",
+      "cotado_em": "2026-09-16T14:32:26-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "KNCR11",
-      "preco": 105.91,
-      "variacao_dia_pct": -0.11,
-      "variacao_30d_pct": 0.64,
-      "cotado_em": "2026-09-16T14:30:39-03:00",
+      "preco": 105.87,
+      "variacao_dia_pct": -0.15,
+      "variacao_30d_pct": 0.6,
+      "cotado_em": "2026-09-16T14:32:29-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "VCJR11",
-      "preco": 67.01,
-      "variacao_dia_pct": 0.39,
-      "variacao_30d_pct": 3.09,
-      "cotado_em": "2026-09-16T14:28:44-03:00",
+      "preco": 67.0,
+      "variacao_dia_pct": 0.38,
+      "variacao_30d_pct": 3.08,
+      "cotado_em": "2026-09-16T14:32:37-03:00",
       "fonte": "yahoo"
     },
     {
       "ticker": "BTLG11",
-      "preco": 99.75,
-      "variacao_dia_pct": 0.26,
-      "variacao_30d_pct": 1.46,
-      "cotado_em": "2026-09-16T14:30:38-03:00",
+      "preco": 99.74,
+      "variacao_dia_pct": 0.25,
+      "variacao_30d_pct": 1.45,
+      "cotado_em": "2026-09-16T14:32:34-03:00",
       "fonte": "yahoo"
     },
     {
@@ -71,7 +71,7 @@
       "preco": 83.75,
       "variacao_dia_pct": 0.19,
       "variacao_30d_pct": 3.65,
-      "cotado_em": "2026-09-16T14:30:30-03:00",
+      "cotado_em": "2026-09-16T14:32:36-03:00",
       "fonte": "yahoo"
     }
   ],
@@ -159,6 +159,28 @@
   ],
   "medium": [
     {
+      "titulo": "#Tr01 - Swear I Didn’t Write a Single Line",
+      "link": "https://medium.com/@emidiofaria/tr01-swear-i-didnt-write-a-single-line-9591c80f09df",
+      "autor": "Emídio Costa",
+      "tag": "software-engineering",
+      "publicado_em": "2026-09-16T14:44:31-03:00",
+      "resumo": "Trillian Chronicles - Paper #1",
+      "imagem": "https://cdn-images-1.medium.com/max/1376/1*7L856QzqOOaBO5KL5Kp2LA.jpeg",
+      "conteudo_html": "<h3>Trillian Chronicles - Paper&nbsp;#1</h3><figure><img alt=\"\" loading=\"lazy\" src=\"https://cdn-images-1.medium.com/max/1024/1*7L856QzqOOaBO5KL5Kp2LA.jpeg\"><figcaption>Trillian Experiment Engineering Developmet Rules</figcaption></figure><h3>“I Swear I Didn’t Write a Single Line: Building a Driving Coach (android) Entirely Through&nbsp;AI”</h3><p><em>Series: The Fully AI-Driven Software Development Experiment<br>Issue: #1 — The Beginning<br>Date: August 2026<br>Author: The Human Who Promised Not to Touch the Keyboard (for code,&nbsp;anyway)</em></p><blockquote>“Can AI write a production-grade app from scratch — spec, code, tests, ops — without a human touching the&nbsp;code?”</blockquote><blockquote>Nobody knows yet. That’s kind of the&nbsp;point.</blockquote><h3>Prologue: A Name, A Mission, A Slightly Unhinged&nbsp;Idea</h3><p>Every great experiment needs a name. This one is called Trillian.</p><p>Why Trillian? Because it sounds cool, it’s a bit mysterious, and naming your side project after something sci-fi is basically mandatory at this point. Bonus: it doubles as “Trace McMillan” — fitting for an app that traces you around a racing&nbsp;circuit.</p><p>Because what follows is, frankly, a little&nbsp;rad.</p><p>The premise: Build a complete, real-world Android application - with a Node.js backend, a PostgreSQL database, Firebase authentication, cloud hosting, and an AI coaching engine — without the human developer writing a single line of&nbsp;code.</p><p>Not “minimal code”. Not “mostly AI-generated with a few tweaks”. Zero. Lines. Of. Code. <strong>NO IDE installed!</strong></p><p>The human’s role is architect, product owner, test oracle, and - when things inevitably go sideways - incident commander. The AI is the developer, the tester, the documenter. The keyboard is for <strong><em>prompts&nbsp;only</em></strong>.</p><p>Main Objective: prove that with AI, we will move to next SW System <strong>development abstraction layer</strong>.</p><ol><li>Machine Code to Assembly Language (1940s–1950s)</li><li>Assembly to High-Level Languages (1950s–1980s)</li><li>High-Level Languages to Managed / Abstract Frameworks (1990s–Present) (…)</li></ol><p>Welcome to the Trillian Chronicles!</p><h3>Chapter 1: What I’m Actually Building?</h3><figure><img alt=\"\" loading=\"lazy\" src=\"https://cdn-images-1.medium.com/max/1024/1*ZCQ0j22oAiNaBYzRcLDSaw.jpeg\"></figure><p>Before we get into the experiment, let’s talk about what Trillian&nbsp;<em>is</em>.</p><p>Phone only Driving Coach is a track day companion app. Picture this: you show up at a racing circuit with your car and your phone. You finger-draw a start/finish line on a map like you’re signing a very sporty cheque. You press record. The app silently captures GPS coordinates and IMU data (accelerometer, gyroscope) at 10Hz throughout your session. You drive. You have fun. You maybe spin once. We don’t judge - the AI coach will, but <em>we</em>&nbsp;don’t.</p><p>After the session, the telemetry uploads to the cloud. The backend - a Node.js/TypeScript service - crunches through your GPS track, finds every time you crossed that start/finish line, and reconstructs your lap times. Then it hands everything to Anthropic Claude (yes, an AI coaching the users of an AI-built app — the recursion is intentional), which generates personalised feedback:</p><blockquote>“You lost 0.4 seconds braking into Turn 3. Your throttle application in Sector 2 is inconsistent. Your best lap was lap 7 — you were 0.2s faster on the exit of the hairpin.”</blockquote><p>Think of it as Strava for track days, with a very opinionated AI in the passenger seat. V1 is post-session only — no real-time coaching, because a push notification saying “BRAKE NOW” at 150km/h is less a feature and more a lawsuit. Future versions could grow into a full social motorsport network. For now: drive, upload, get roasted by Trillian.</p><p>117 requirements. 10 fundamental architecture decisions locked before a single prompt was sent to a code generator. Two full test suites. 135 human system acceptance test cases, written to be executed at a real track&nbsp;day.</p><blockquote>It’s not a toy. It’s a real system. And it was built - entirely - by humans “driving” AI.</blockquote><h3>Chapter 2: The Rules of Engagement (or, How to Build Software with Your Hands&nbsp;Tied)</h3><figure><img alt=\"\" loading=\"lazy\" src=\"https://cdn-images-1.medium.com/max/1024/1*W1b0qENLQMn2Q9gyng5XWw.jpeg\"><figcaption>Rules of the&nbsp;game.</figcaption></figure><p>The experiment has three rules. They’re simple. They’re strict. They will occasionally make you (me) want to&nbsp;cry.</p><blockquote><strong>#Rule 1:</strong> Never touch the&nbsp;code.</blockquote><p>The human interacts only through AI. No sneaky edits to a Kotlin file. No “just this once” fix in TypeScript at 11pm. If it’s broken, you write a prompt, file an incident, or invoke an agent. The keyboard is for thinking out loud to a machine - not for patching things manually like a normal&nbsp;person.</p><blockquote><strong>#Rule 2:</strong> Spec-Driven Development.</blockquote><p>Nothing gets built without a specification first. The System Requirements <strong>Specification (SRS) is the constitution</strong>. Every feature, every API endpoint, every database field traces back to a numbered requirement. UM-01 says registration requires email + password + display name. If the code doesn't implement UM-01, the code is wrong - not the spec. The spec is always right. The spec is basically a&nbsp;deity.</p><blockquote><strong>#Rule 3: </strong>Test-Driven Development.</blockquote><p>Tests are not optional, not an afterthought, and definitely not something you “get around to later.” Unit tests and integration tests are part of every implementation phase. If something breaks without a test catching it first, that’s a process failure, not just a bug. <strong>The test suite is the immune&nbsp;system.</strong></p><blockquote>Bonus Rule:&nbsp;V-Model.</blockquote><p>The classic systems engineering model, dusted off from the 1980s aerospace playbook - requirements define acceptance tests at the top; design defines integration tests in the middle; code defines unit tests at the bottom. All 135 human system acceptance tests for this app were derived directly from the SRS <em>before the app existed</em>. That’s not accidental - it’s the methodology. It’s also slightly terrifying.</p><p>Taken together, these rules are, in essence, a wager: can rigorous engineering discipline applied <em>through</em> AI produce reliable software? Can you get aerospace-grade SDLC quality from a chat interface and a well-written spec? We are about to find&nbsp;out.</p><h3>Chapter 3: The&nbsp;Players</h3><figure><img alt=\"\" loading=\"lazy\" src=\"https://cdn-images-1.medium.com/max/1024/1*32speJSoER7iGlmUEWU7cA.jpeg\"><figcaption>Trillian Developer ecosystem caricature. Agentic system to ensure quakity and avoid halucinations.</figcaption></figure><p>No experiment runs on a single mind. This one used three distinct AI roles, each with a job description that would look great on a business&nbsp;card:</p><p>The Architect&nbsp;: Handed a napkin-sketch product idea and told to turn it into a 117-requirement SRS. The human (me) wrote the vision in plain English; the AI wrote the specification with numbered requirements, locked architecture decisions, and enough edge case coverage to make a QA engineer emotional. It thought of things the human hadn’t - like what happens when the Firebase token expires mid-upload at 200km/h. Nobody asked it to think that hard. It did&nbsp;anyway.</p><p>The Builder - (Opus family model)&nbsp;: The engine room. Fed the SRS plus a detailed implementation plan (also AI-generated, naturally), it built the Android app phase by phase - scaffold, database layer, telemetry service, backend, UI screens, API client, test suite - across 10 structured phases. Output: ~50 Kotlin files, ~30 XML layouts, ~15 TypeScript files, 61 automated tests. Nobody typed a single fun or class by&nbsp;hand.</p><p>The Doctor - RCA Agent (custom&nbsp;.github/agents/): The incident specialist. When things break, this agent steps in with evidence-first reasoning - no \"probably\" or \"in my experience\", only \"the log shows\" and \"the stack trace indicates\". It is rigorous to the point of being slightly pedantic. That is a feature, not a bug, when you're debugging a SecurityException at 8am on a Saturday. Possible soon will have a child: \"Provide Fix Agent\" (custom&nbsp;.github/agents/): Agent that will help us provide fix for incidents. most complex agent, will implement the code, runs tests and judge if we can merge the&nbsp;fix.</p><h3>Chapter 4: The First Incident (crash) - Android 12 Would Like a&nbsp;Word</h3><figure><img alt=\"\" loading=\"lazy\" src=\"https://cdn-images-1.medium.com/max/1024/1*KG1FeMd2IV7n4UNZbl0FPg.jpeg\"></figure><p>The app was built. It ran on the emulator. The features were there. The team (one human and a rotating cast of language models) felt quietly smug about&nbsp;this.</p><p>Then came the first real test: actually running the recording on a physical&nbsp;device.</p><p>Crash. Immediate. Spectacular. Predictable in hindsight, as all crashes&nbsp;are.</p><pre>java.lang.SecurityException: To use the sampling rate of 0 microseconds,<br>app needs to declare the normal permission HIGH_SAMPLING_RATE_SENSORS.</pre><p>Android 12 introduced a rule: if your app samples sensors faster than 200Hz, you must declare HIGH_SAMPLING_RATE_SENSORS in the manifest. The IMU was being sampled at maximum rate (0 microseconds = \"give me everything the hardware has, I don't care, I'm a track day app\"). The manifest had no such permission. The phone said no, firmly, in the form of a SecurityException.</p><p>The human’s instinct — forged by twenty years of muscle memory — was to open the manifest file and add one line. Three seconds. Done. Coffee still&nbsp;warm.</p><p>Rule 1 says no. Put the keyboard&nbsp;down.</p><p>So instead: incident report filed in 03_incidents/, RCA agent invoked, root cause confirmed with evidence, fix prompt written, fix applied by the AI, build verified. The whole loop took considerably longer than three&nbsp;seconds.</p><p>But here’s the thing. What it <em>produced</em> was: a documented incident with root cause, evidence chain, fix, and a prevention note — all traceable back to the SRS non-functional requirement that the app must sample at minimum 10Hz. Six months from now, when someone asks “why is HIGH_SAMPLING_RATE_SENSORS in the manifest?\", the answer is sitting in the repo with its full paper&nbsp;trail.</p><p>The three-second fix would have left nothing. The process-compliant fix left institutional memory.</p><p><em>That is the whole trade. Slower in the moment, richer&nbsp;forever.</em></p><h3>Chapter 5: Scoreboard — End of Sprint&nbsp;Zero</h3><figure><img alt=\"\" loading=\"lazy\" src=\"https://cdn-images-1.medium.com/max/1024/1*HjKnhljpASzDMdiB-sdhPw.jpeg\"></figure><p>As of June 2026, here’s the honest state of the&nbsp;mission:</p><ul><li>DimensionStatusSRS (117 requirements) — ✅ Approved, locked</li><li>Android App Build — ✅ Builds successfully</li><li>Backend Build -✅ Builds successfully</li><li>Unit Tests (61)&nbsp;-✅</li><li>PassingHuman Acceptance Tests (135) — ✅</li><li>Documented, ready for execution</li><li>Real device testing — ⚠️ One crash found, one crash&nbsp;fixed</li><li>Track day validation🔜 Pending</li></ul><p>The app runs. The features are there. The overall verdict was “surprisingly good” — which is a genuinely surprising thing to say about a codebase no human ever typed. Or maybe not surprising at all. The spec was precise. The plan was structured. The AI followed instructions.</p><p>The lesson from Sprint Zero, stated plainly: AI code quality is a direct reflection of spec quality. Vague prompt → vague result. Clear, complete, well-reasoned spec → something you can actually run, test, and demo. The AI is not magic. It’s a very fast, very literal contractor. Write good requirements, get good&nbsp;code.</p><h3>Chapter 6: The Questions We’re Here to&nbsp;Answer</h3><p>This paper is the first in a bi-monthly series. Each issue tracks the experiment’s progress — what worked, what blew up, what was learned. The open questions driving the whole adventure:</p><ol><li>Can a fully spec-driven, AI-implemented project stay quality without a human ever patching the&nbsp;code?</li><li>Does the V-Model survive contact with AI-generated code? Early sign: surprisingly yes — because spec-driven AI code is paradoxically more traceable than a lot of human-written code.</li><li>How far can AI agents carry operations? RCA, incident triage, fix generation — can the human stay out of the repo even when the production system is on fire at&nbsp;2am?</li><li>What does this process actually cost? Not in euros — in time, in prompt iteration, in cognitive effort. Is it faster than traditional development? Probably not. Is it more disciplined? Possibly. Is it more fun? Absolutely.</li><li>Is this the future, or an elaborate way to make simple things&nbsp;hard?</li></ol><p>Honest answer right now: <em>we don’t know</em>. The app builds. One real crash was caught and fixed without human code intervention. The system tests are waiting for a track day with tarmac and tyre squeal. There is a lot of road left in this experiment.</p><p>But what we can already say: a complete, working application — real architecture, real tests, real operational tooling — was built entirely from a specification document, by AI, with a human who never touched the source. That’s not nothing. That is, in fact, the entire&nbsp;point.</p><h3>Epilogue: Mostly&nbsp;Working</h3><p>The Trillian project’s current official verdict on fully AI-driven software development: “Mostly working.”</p><p>That’s a better grade than most side projects get. We’ll take it. For&nbsp;now.</p><p>Paper #2 will cover the first real track day — GPS accuracy in the wild, lap detection quality on actual tarmac, and whether the AI coaching feedback is genuinely useful or just very confidently wrong. Given what’s been delivered so far, the bet is on “surprisingly useful.” We have been surprised before. Pleasantly.</p><p>Until then: write the spec, trust the process, and for the love of all things engineering —</p><p>Do. Not. Touch. The.&nbsp;Code.</p><p><em>📄 Next Paper: “Trillian Chronicles #2 — The Track Day” </em><br><em>🔗 Repo: </em><em>05_AI_DIY/Trillian</em><br><em>⚙️ Stack: Kotlin · TypeScript · Node.js · Firebase · Anthropic Claude</em><br><em>📋 SRS: </em><em>01_requirements/DrivingCoach_SRS_v1.md — 117 requirements, 10 critical architecture decisions</em></p>",
+      "leitura_min": 10
+    },
+    {
+      "titulo": "Kubernetes Is Not the Solution to Everything",
+      "link": "https://shiv-jani.medium.com/kubernetes-is-not-the-solution-to-everything-39de6626b689",
+      "autor": "Shiv Jani",
+      "tag": "software-engineering",
+      "publicado_em": "2026-09-16T14:39:13-03:00",
+      "resumo": null,
+      "imagem": "https://cdn-images-1.medium.com/max/1448/1*fh7s__UAPxYTdmqzKpl08Q.png",
+      "conteudo_html": null,
+      "leitura_min": null
+    },
+    {
       "titulo": "What is LangChain? A Beginner’s Guide — Part 1",
       "link": "https://medium.com/@shubhamnagar234/what-is-langchain-a-beginners-guide-part-1-84ff77377cc9",
       "autor": "Shubham Nagar",
@@ -179,28 +201,6 @@
       "imagem": null,
       "conteudo_html": "<h3>They get used interchangeably. They’re not the same thing — and mixing them up is why some AI agents get harder to manage the smarter they&nbsp;get</h3><p>I kept running into the same confusion while building out my agent system: was I writing a <em>prompt</em>, or was I building a <em>skill</em>? They looked similar on the page — both just text an agent reads before doing something. But they weren’t doing the same job, and once I actually separated them, a lot of things got&nbsp;easier.</p><p><strong>1. A prompt is “what to do right&nbsp;now”</strong></p><p>A prompt is the instructions for one specific task an agent is doing. Who it is, what it needs to know for this moment, what it’s supposed to do, what it shouldn’t do, and how to respond. It belongs to one agent, doing one job, right&nbsp;now.</p><p>That’s the prompt structure I covered earlier in this series — Role, Context, Task, Constraints, Output Format. It’s scoped tight on purpose. A tight prompt is one you can actually test and improve with confidence, because you know exactly what it’s supposed to&nbsp;handle.</p><p><strong>2. A skill is “something the agent knows how to&nbsp;do”</strong></p><p>A skill is different. It’s a capability — a way of doing something — that isn’t tied to one conversation. It’s the kind of thing you’d want an agent to be able to reach for again and again, no matter which task brought it&nbsp;up.</p><p>Think of it like the difference between handing someone a recipe for tonight’s dinner versus teaching them how to cook. The recipe is a prompt — specific, one-time, tied to tonight. Knowing how to cook is a skill — it doesn’t belong to any one dinner, and once they have it, it’s available for every dinner after this&nbsp;one.</p><p><strong>3. Why this started mattering to&nbsp;me</strong></p><p>Early on, I didn’t separate the two. If an agent needed to format output a certain way, or check something against a rule, I just wrote it straight into that agent’s prompt. It worked — for one&nbsp;agent.</p><p>The trouble started once I had several agents that all needed to do some version of the same thing. I’d fix a formatting quirk in one agent’s prompt, and the same quirk would still be sitting there, unfixed, in three other agents’ prompts, because I’d written the same instructions three separate times instead of&nbsp;once.</p><p>That’s the moment a skill earns its own identity — the moment more than one agent needs to lean on the same capability. Once I pulled that shared logic out into its own thing and had agents reference it instead of repeating it, fixing it once actually fixed it everywhere.</p><p><strong>4. A simple way to tell them&nbsp;apart</strong></p><p>Ask yourself: if I handed this instruction to a completely different agent doing a completely different job, would it still make sense on its own? If yes, it’s probably a skill hiding inside a prompt — it deserves to be pulled out and shared. If it only makes sense for this one agent’s specific task, leave it exactly where it is, as part of the&nbsp;prompt.</p><p>This is really how I ended up structuring my own agents — skills sit as their own piece, separate from whatever prompt is driving one of my agents’ tasks in the moment. I’m not writing one giant instruction blob for each new agent. Each one gets a focused prompt, plus access to whatever skills that task actually calls&nbsp;for.</p><p><strong>5. What changed once I split&nbsp;them</strong></p><p>A few things got noticeably easier:</p><ul><li>Fixing something in a skill fixed it everywhere it was used, instead of hunting down every prompt that had quietly copied the same&nbsp;idea.</li><li>Prompts stayed short, because they weren’t carrying capability that belonged somewhere else.</li><li>I could improve one skill without worrying I’d have to go re-test five unrelated agents.</li></ul><p>The prompt is still where an agent’s specific job lives. The skill is where its know-how lives. Mixing the two together works fine for one agent. It’s exactly what makes a whole team of agents harder to keep straight.</p><p><em>This is a piece in a series on building reliable AI agent systems — from prompt structure, to testing, to how prompts and skills fit together as an agent system&nbsp;grows.</em></p>",
       "leitura_min": 4
-    },
-    {
-      "titulo": "Reranking in RAG — Cross-Encoders, the K Threshold, and the Recall Ceiling in Production Systems",
-      "link": "https://medium.com/@wasowski.jarek/reranking-in-rag-cross-encoders-the-k-threshold-and-the-recall-ceiling-in-production-systems-52197af37fa2",
-      "autor": "Jaroslaw Wasowski",
-      "tag": "software-engineering",
-      "publicado_em": "2026-09-16T14:23:01-03:00",
-      "resumo": "A cross-encoder only improves RAG within a narrow window: above the recall@50 threshold and below the K threshold. The mechanism, Phantom…",
-      "imagem": "https://cdn-images-1.medium.com/max/2600/1*NFiQAy5NLF3vXQN_SCyTgg.png",
-      "conteudo_html": null,
-      "leitura_min": null
-    },
-    {
-      "titulo": "How Large Backends Find Bottlenecks That Metrics Don’t Show",
-      "link": "https://medium.com/@optimzationking2/how-large-backends-find-bottlenecks-that-metrics-dont-show-2d71ca91e566",
-      "autor": "TheOptimizationKing",
-      "tag": "software-engineering",
-      "publicado_em": "2026-09-16T14:21:01-03:00",
-      "resumo": "Your dashboard is green.",
-      "imagem": "https://cdn-images-1.medium.com/max/800/0*LmkCWFey11KCdT11.jpg",
-      "conteudo_html": null,
-      "leitura_min": null
     },
     {
       "titulo": "Building self learning Orchestrated skill groups",
@@ -262,38 +262,30 @@
       "erro": null,
       "origem": "yahoo",
       "avisos": [
-        "KNRI11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
-        "HGLG11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
-        "XPML11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
-        "CPTS11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
-        "PVBI11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
-        "KNCR11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
-        "VCJR11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
-        "BTLG11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'",
-        "CPTI11: brapi: Invalid leading whitespace, reserved character(s), or return character(s) in header value: 'Bearer - Se afastado (auxílio doença, licença) e temporário continuam elegíveis ? Sim.\\n-  54 funcionários ativos da Rosset estão sem CPF na folha. Sem CPF, não há como aplicar o benefício. Precisa corrigir a base.\\n-  O RH poderia ter um painel para ATIVAR e DESATIVAR essa política ? A política poderia ser aplicada ou não por funcionário ? Enquanto funcionário a política é válida. A partir do desligamento da pessoa, ela perde o direito de compra com desconto.\\n-  Falta apenas o cadastro do PJ, esse está em desenvolvimento, não virá da folha, ele também entrará na política ou apenas o CLT ? Tanto PJ quanto CLT terão benefícios dos descontos.'"
+        "BRAPI_TOKEN malformado (contém espaços ou caracteres inválidos): brapi ignorada"
       ],
-      "duracao_s": 0.94
+      "duracao_s": 1.09
     },
     "infomoney_manchetes": {
       "ok": true,
       "erro": null,
       "origem": "rss tudo-sobre/fundos-imobiliarios",
       "avisos": [],
-      "duracao_s": 0.99
+      "duracao_s": 0.34
     },
     "medium": {
       "ok": true,
       "erro": null,
       "origem": "rss",
       "avisos": [],
-      "duracao_s": 2.83
+      "duracao_s": 2.93
     },
     "corrida_no_ar": {
       "ok": true,
       "erro": null,
       "origem": "feed /feed",
       "avisos": [],
-      "duracao_s": 1.21
+      "duracao_s": 0.96
     }
   }
 }
