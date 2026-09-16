@@ -231,6 +231,21 @@ def test_fiis_sem_token_cai_no_yahoo_e_desativa_brapi(monkeypatch):
     assert any("FALHA11" in a for a in resultado.avisos)
 
 
+def test_fiis_token_malformado_nao_chama_brapi(monkeypatch):
+    def brapi(ticker, token):
+        raise AssertionError("não deveria chamar a brapi")
+
+    monkeypatch.setenv("BRAPI_TOKEN", "abc123\ntexto colado junto")
+    monkeypatch.setattr(fiis, "cotacao_brapi", brapi)
+    monkeypatch.setattr(
+        fiis, "cotacao_yahoo",
+        lambda t: fiis._montar(t, preco=10, variacao_dia=0, variacao_30d=None, cotado_em=None, fonte="yahoo"),
+    )
+    resultado = fiis.coletar(["AAAA11", "BBBB11"])
+    assert resultado.origem == "yahoo"
+    assert resultado.avisos == ["BRAPI_TOKEN malformado (contém espaços ou caracteres inválidos): brapi ignorada"]
+
+
 def test_falha_de_uma_fonte_nao_derruba_as_outras(tmp_path, monkeypatch):
     def quebra():
         raise ColetaErro("site mudou")

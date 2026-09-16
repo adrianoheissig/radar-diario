@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import os
+import re
 from datetime import datetime, timezone
 
 from collector import config
 from collector.comum import ColetaErro, Resultado, arredondar, get, iso, sessao
 
 _DIA = 86_400
+_TOKEN_VALIDO = re.compile(r"[A-Za-z0-9._~+/=-]+")
 _TOLERANCIA_30D = 7 * _DIA  # aceita série que começa até 7 dias depois do alvo
 
 
@@ -20,10 +22,13 @@ def coletar(tickers: list[str] | None = None) -> Resultado:
     tickers = tickers or config.FIIS
     token = os.environ.get("BRAPI_TOKEN", "").strip() or None
     avisos = []
+    brapi_ativa = True
     if not token:
         avisos.append("BRAPI_TOKEN não definido: brapi sem token só atende ativos de teste")
-
-    brapi_ativa = True
+    elif not _TOKEN_VALIDO.fullmatch(token):
+        # ex.: secret cadastrado com texto colado junto (espaços, quebras de linha)
+        avisos.append("BRAPI_TOKEN malformado (contém espaços ou caracteres inválidos): brapi ignorada")
+        brapi_ativa = False
     cotacoes = []
     for ticker in tickers:
         cotacao, erros = None, []
