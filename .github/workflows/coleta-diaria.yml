@@ -2,9 +2,12 @@ name: Coleta diária
 
 on:
   schedule:
-    # 06:00 em America/Sao_Paulo = 09:00 UTC (UTC-3; o Brasil não tem horário de verão desde 2019).
-    # O cron do GitHub é sempre em UTC e pode atrasar alguns minutos em horários de pico.
-    - cron: "0 9 * * *"
+    # O cron do GitHub é sempre em UTC. São Paulo = UTC-3 (sem horário de verão desde 2019).
+    # Agendamentos na virada da hora (ex.: "0 9") são os que mais atrasam ou são descartados
+    # pelo GitHub em horários de pico, por isso os minutos "quebrados".
+    - cron: "53 8 * * *"   # principal: 05:53 em São Paulo
+    - cron: "23 9 * * *"   # reserva:   06:23 (só coleta se o resumo de hoje não existir)
+    - cron: "13 11 * * *"  # reserva:   08:13 (idem)
   workflow_dispatch:
 
 permissions:
@@ -22,16 +25,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      - name: Verificar se o resumo de hoje já existe
+        id: verificar
+        run: |
+          hoje=$(TZ=America/Sao_Paulo date +%F)
+          if [ "${{ github.event_name }}" = "schedule" ] && [ -f "docs/data/resumo-$hoje.json" ]; then
+            echo "Resumo de $hoje já existe; execução de reserva ignorada."
+            echo "pular=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Python 3.12
+        if: steps.verificar.outputs.pular != 'true'
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
 
       - name: Instalar dependências
+        if: steps.verificar.outputs.pular != 'true'
         run: pip install -r requirements.txt
 
       - name: Rodar coletor
+        if: steps.verificar.outputs.pular != 'true'
         env:
           BRAPI_TOKEN: ${{ secrets.BRAPI_TOKEN }}
           TZ: America/Sao_Paulo
@@ -40,6 +55,7 @@ jobs:
         run: python collector/main.py
 
       - name: Commit e push (somente se houver mudanças)
+        if: steps.verificar.outputs.pular != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

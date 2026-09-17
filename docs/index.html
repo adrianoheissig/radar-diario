@@ -56,6 +56,9 @@
       <p v-else-if="erroCarga" class="estado estado-erro">{{ erroCarga }}</p>
 
       <template v-else-if="resumo">
+        <p v-if="resumoDesatualizado" class="alerta alerta-aviso aviso-desatualizado" role="status">
+          Este é o resumo de {{ formatarData(resumo.data) }}: a coleta de hoje ainda não rodou.
+        </p>
         <!-- FIIs -->
         <section v-if="aba === 'fiis'" id="painel-fiis" role="tabpanel" aria-labelledby="aba-fiis" class="card">
           <header class="card-topo">

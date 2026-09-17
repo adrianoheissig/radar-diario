@@ -215,6 +215,7 @@ main {
 }
 
 .painel > .alerta { margin: 0; }
+.aviso-desatualizado { margin: 0 0 12px; }
 .alerta-erro { background: var(--erro-bg); color: var(--negativo); }
 .alerta-aviso { background: var(--aviso-bg); color: var(--aviso); }
 .alerta-aviso summary { cursor: pointer; }

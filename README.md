@@ -86,15 +86,17 @@ python -m http.server -d docs 8080
 
 ## Agendamento
 
-O cron do GitHub Actions é sempre em **UTC**. 06:00 em `America/Sao_Paulo` (UTC−3, sem horário de verão desde 2019) = **09:00 UTC**:
+O cron do GitHub Actions é sempre em **UTC**, e São Paulo é UTC−3 (sem horário de verão desde 2019):
 
 ```yaml
-- cron: "0 9 * * *"
+- cron: "53 8 * * *"   # principal: 05:53 em São Paulo
+- cron: "23 9 * * *"   # reserva:   06:23
+- cron: "13 11 * * *"  # reserva:   08:13
 ```
 
-Observações:
-
-- O GitHub pode atrasar execuções agendadas em alguns minutos (às vezes mais) em horários de pico.
+- O GitHub pode **atrasar ou descartar** execuções agendadas em horários de pico, principalmente na virada da hora (`0 * * * *`). Por isso os minutos "quebrados" e as duas reservas.
+- As reservas só coletam se `docs/data/resumo-<hoje>.json` ainda não existir; caso contrário terminam em segundos, sem commit. O disparo manual (*Run workflow*) sempre coleta.
+- Se mesmo assim o resumo do dia não sair, o painel mostra um aviso de que está exibindo o resumo de um dia anterior.
 - Em repositórios públicos, workflows agendados são desativados após 60 dias sem atividade no repositório. Se isso acontecer, reative em *Actions*.
 
 ## Fontes e fallbacks

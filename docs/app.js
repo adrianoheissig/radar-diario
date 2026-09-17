@@ -16,6 +16,7 @@ const fmtPct = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximu
 const fmtData = new Intl.DateTimeFormat("pt-BR", { weekday: "short", day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
 const fmtDataHora = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
 const fmtRelativo = new Intl.RelativeTimeFormat("pt-BR", { numeric: "auto" });
+const fmtDiaSP = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }); // YYYY-MM-DD
 
 // ---------------------------------------------------------------- sanitização
 
@@ -137,6 +138,10 @@ createApp({
     const indiceAtual = computed(() => datas.value.indexOf(dataAtual.value));
     const temMaisAntigo = computed(() => indiceAtual.value >= 0 && indiceAtual.value < datas.value.length - 1);
     const temMaisNovo = computed(() => indiceAtual.value > 0);
+    // vendo o resumo mais recente, mas ele não é de hoje (coleta agendada atrasou ou falhou)
+    const resumoDesatualizado = computed(
+      () => !!resumo.value && !dataCarregada.value && resumo.value.data < fmtDiaSP.format(new Date())
+    );
 
     // ---- dados
 
@@ -295,7 +300,7 @@ createApp({
     }
 
     return {
-      abas: ABAS, aba, barraAbas, resumo, datas, dataAtual, carregando, erroCarga, tema,
+      abas: ABAS, aba, barraAbas, resumo, resumoDesatualizado, datas, dataAtual, carregando, erroCarga, tema,
       temMaisAntigo, temMaisNovo, irParaData, mover, selecionarAba, alternarTema, st, contagem,
       estaAberto, alternar, idItem, filtroTag, tagsMedium, mediumFiltrado, todosMediumAbertos, alternarTodosMedium,
       formatarData, formatarDataHora, formatarPreco, formatarPct, classeVariacao, tempoRelativo,
