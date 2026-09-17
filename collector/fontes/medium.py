@@ -2,7 +2,8 @@
 
 O feed de tag só traz um trecho. O texto completo vem do feed do autor ou da
 publicação (content:encoded), localizando o post pelo guid. Artigos exclusivos
-para membros e posts que já saíram do feed ficam só com o trecho.
+para membros e posts que já saíram do feed não têm texto completo: com
+MEDIUM_APENAS_TEXTO_COMPLETO eles são pulados e a tag segue para o próximo item.
 """
 
 from __future__ import annotations
@@ -19,7 +20,9 @@ from collector.html_limpo import conteudo_da_entrada, limpar_conteudo, minutos_l
 def coletar(tags: list[str] | None = None, por_tag: int | None = None) -> Resultado:
     tags = tags or config.MEDIUM_TAGS
     por_tag = por_tag or config.MEDIUM_POR_TAG
+    buscar_texto = config.MEDIUM_TEXTO_COMPLETO or config.MEDIUM_APENAS_TEXTO_COMPLETO
     itens, avisos, vistos = [], [], set()
+    cache: dict[str, object] = {}
 
     for tag in tags:
         url = config.MEDIUM_FEED_URL.format(tag=quote(tag.lower()))
@@ -30,7 +33,7 @@ def coletar(tags: list[str] | None = None, por_tag: int | None = None) -> Result
             continue
 
         entradas = sorted(feed.entries, key=lambda e: data_da_entrada(e) or "", reverse=True)
-        da_tag = 0
+        da_tag = pulados = 0
         for entrada in entradas:
             if da_tag >= por_tag:
                 break
@@ -40,24 +43,32 @@ def coletar(tags: list[str] | None = None, por_tag: int | None = None) -> Result
             if not link or chave in vistos:
                 continue
             vistos.add(chave)
-            itens.append(item_do_feed_de_tag(entrada, tag, link))
+            item = item_do_feed_de_tag(entrada, tag, link)
+
+            if buscar_texto:
+                try:
+                    item["conteudo_html"] = texto_completo(item, cache)
+                except Exception as exc:
+                    # no modo "só texto completo" a falha só faz o artigo ser pulado (contado abaixo)
+                    if not config.MEDIUM_APENAS_TEXTO_COMPLETO:
+                        avisos.append(f"texto completo de '{item['titulo'][:40]}': {exc}")
+                item["leitura_min"] = minutos_leitura(item["conteudo_html"])
+            if config.MEDIUM_APENAS_TEXTO_COMPLETO and not item["conteudo_html"]:
+                pulados += 1
+                continue
+
+            del item["_guid"]
+            itens.append(item)
             da_tag += 1
+
+        if da_tag < por_tag:
+            detalhe = f" ({pulados} sem texto completo pulados)" if pulados else ""
+            avisos.append(f"tag {tag}: só {da_tag} de {por_tag} artigos{detalhe}")
 
     if not itens:
         raise ColetaErro("nenhum item obtido" + (f": {'; '.join(avisos)}" if avisos else ""))
 
-    if config.MEDIUM_TEXTO_COMPLETO:
-        cache: dict[str, object] = {}
-        for item in itens:
-            try:
-                item["conteudo_html"] = texto_completo(item, cache)
-            except Exception as exc:
-                avisos.append(f"texto completo de '{item['titulo'][:40]}': {exc}")
-            item["leitura_min"] = minutos_leitura(item["conteudo_html"])
-
     itens.sort(key=lambda item: item["publicado_em"] or "", reverse=True)
-    for item in itens:
-        del item["_guid"]
     return Resultado(itens, origem="rss", avisos=avisos)
 
 

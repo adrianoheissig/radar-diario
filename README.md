@@ -2,9 +2,9 @@
 
 Painel pessoal publicado no **GitHub Pages** que mostra, toda manhã, um resumo com:
 
-- cotações dos meus **FIIs** (preço, variação do dia e de 30 dias);
-- manchetes de **FIIs da InfoMoney** com resumo, autor, categorias e a matéria completa;
-- artigos recentes do **Medium** (os mais novos de cada tag), com o texto completo para ler no painel;
+- cotações dos meus **FIIs** (preço e variação do último pregão, da semana e do mês);
+- as **manchetes de capa da InfoMoney** com seção, resumo, autor, categorias e a matéria completa;
+- artigos recentes do **Medium** (os mais novos de cada tag), só os que têm texto completo para ler no painel;
 - a última publicação do **Corrida no Ar**, completa.
 
 Cada fonte fica em uma aba. Textos longos abrem e fecham com um botão, sem sair do painel.
@@ -104,17 +104,21 @@ O cron do GitHub Actions é sempre em **UTC**, e São Paulo é UTC−3 (sem hor�
 | Fonte | Principal | Fallback |
 |---|---|---|
 | FIIs | `brapi.dev/api/quote/{ticker}?range=1mo` (com `BRAPI_TOKEN`) | Yahoo Finance `v8/finance/chart/{ticker}.SA` |
-| InfoMoney | RSS `infomoney.com.br/tudo-sobre/fundos-imobiliarios/feed/` (resumo, autor, categorias, imagem e matéria completa via `content:encoded`) | scraping da seção "Últimas notícias sobre FIIs" em `/cotacoes/b3/fii/` (só título e link) |
-| Medium | RSS `medium.com/feed/tag/{tag}`: os `MEDIUM_POR_TAG` mais recentes de cada tag, deduplicados pelo guid. Texto completo buscado no feed do autor/publicação | sem texto completo (exclusivo para membros ou fora do feed do autor): fica o trecho + link; tags que falham viram aviso |
+| InfoMoney | capa `infomoney.com.br` (as `INFOMONEY_LIMITE` primeiras manchetes, na ordem da home; o 1º card é o destaque) + página de cada matéria (metatags, JSON-LD e corpo em `article.im-article`) | feed geral `infomoney.com.br/feed/` (últimas notícias) |
+| Medium | RSS `medium.com/feed/tag/{tag}`: os `MEDIUM_POR_TAG` mais recentes **com texto completo** de cada tag, deduplicados pelo guid. Texto buscado no feed do autor/publicação | artigos sem texto completo (exclusivos para membros ou fora do feed do autor) são pulados; tag com menos artigos que a cota ou que falha vira aviso |
 | Corrida no Ar | RSS em `/feed`, `/rss`, `/feed.xml` (post completo via `content:encoded`) | autodescoberta via `<link rel="alternate">` e scraping do 1º post da home (só resumo) |
 
 Detalhes:
 
 - **brapi sem token** só atende alguns ativos de teste (PETR4, VALE3...). Ao receber erro de autenticação, o coletor desativa a brapi naquela execução e usa o Yahoo para todos os tickers. Com token, a brapi é usada e o Yahoo só entra se um ticker falhar.
-- **InfoMoney**: a seção de notícias da página de cotações costuma estar desatualizada (em set/2026 trazia só 4 notícias, de um mês antes). Por isso o feed da tag é a fonte principal.
+- **InfoMoney**: o feed geral não traz as manchetes da capa, então os detalhes vêm da página de cada matéria (1 requisição por manchete). Anúncios, "Leia também" e chamadas de assinatura são removidos do corpo, e as imagens usam a versão reduzida do CDN (`resize=640,360`).
 - **Yahoo** responde 429 para User-Agent de navegador completo sem cookies. Por isso ele usa um UA curto (`YAHOO_USER_AGENT` em `config.py`).
-- A variação de 30 dias compara o preço atual com o último fechamento de 30 dias atrás ou antes.
-- **Medium, texto completo**: o feed de tag só traz um trecho. O coletor lê o feed do autor (`medium.com/feed/@autor`), da publicação (`medium.com/feed/publicacao`) ou do domínio próprio (`blog.exemplo.com/feed`) e localiza o post pelo guid. Desligue com `MEDIUM_TEXTO_COMPLETO = False`.
+- **Variações dos FIIs** (a coleta roda antes da abertura, então tudo é relativo ao último pregão):
+  - *Dia ant.*: variação do último pregão;
+  - *Semana*: preço vs. último fechamento antes da segunda-feira da semana do último pregão;
+  - *Mês*: preço vs. último fechamento antes do dia 1º do mês do último pregão.
+  O histórico pedido é de 3 meses (`range=3mo`); se o plano não permitir, cai para 1 mês e depois só a cotação.
+- **Medium, texto completo**: o feed de tag só traz um trecho. O coletor lê o feed do autor (`medium.com/feed/@autor`), da publicação (`medium.com/feed/publicacao`) ou do domínio próprio (`blog.exemplo.com/feed`) e localiza o post pelo guid. Com `MEDIUM_APENAS_TEXTO_COMPLETO = False` os artigos sem texto completo voltam a aparecer (trecho + link).
 
 ## Conteúdo completo e segurança
 
@@ -142,12 +146,13 @@ O painel mostra falhas e avisos no card de cada fonte.
   "gerado_em": "2026-09-16T06:00:12-03:00",
   "data": "2026-09-16",
   "fiis": [
-    {"ticker": "KNRI11", "preco": 157.6, "variacao_dia_pct": -0.55, "variacao_30d_pct": 5.69,
+    {"ticker": "KNRI11", "preco": 157.6, "variacao_dia_pct": -0.83, "variacao_semana_pct": -0.15, "variacao_mes_pct": -0.22,
      "cotado_em": "2026-09-15T18:07:00-03:00", "fonte": "brapi"}
   ],
   "infomoney_manchetes": [
-    {"titulo": "...", "link": "https://...", "resumo": "...", "autor": "...", "publicado_em": "ISO-8601",
-     "categorias": ["FIIs", "XPML11"], "imagem": "https://...", "conteudo_html": "<p>...</p>", "leitura_min": 3}
+    {"titulo": "...", "link": "https://...", "destaque": true, "secao": "Mercados", "resumo": "...",
+     "autor": "...", "publicado_em": "ISO-8601", "categorias": ["Ações", "Dólar"], "imagem": "https://...",
+     "conteudo_html": "<p>...</p>", "leitura_min": 6}
   ],
   "medium": [
     {"titulo": "...", "link": "...", "autor": "...", "tag": "Claude", "publicado_em": "ISO-8601",
@@ -170,6 +175,6 @@ Os campos além do schema mínimo original (`data`, `status`, `cotado_em`, `font
 
 ## Personalização
 
-Tudo em [`collector/config.py`](collector/config.py): `MEDIUM_TAGS`, `MEDIUM_POR_TAG`, `MEDIUM_TEXTO_COMPLETO`, `FIIS`, `INFOMONEY_LIMITE`, `INFOMONEY_RESUMO_MAX`, `FII_FALLBACK_YAHOO` etc.
+Tudo em [`collector/config.py`](collector/config.py): `MEDIUM_TAGS`, `MEDIUM_POR_TAG`, `MEDIUM_APENAS_TEXTO_COMPLETO`, `FIIS`, `INFOMONEY_LIMITE`, `INFOMONEY_RESUMO_MAX`, `FII_FALLBACK_YAHOO` etc.
 
 No painel, a aba e a data ficam na URL (`#medium`, `#2026-09-15/corrida`), então dá para salvar atalhos. O tema claro/escuro é lembrado no navegador.

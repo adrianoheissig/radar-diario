@@ -1,17 +1,24 @@
-"""Cotações dos FIIs: brapi.dev (com BRAPI_TOKEN) e Yahoo Finance como fallback."""
+"""Cotações dos FIIs: brapi.dev (com BRAPI_TOKEN) e Yahoo Finance como fallback.
+
+Variações calculadas a partir do último pregão (a coleta roda antes da abertura):
+- dia:    variação do último pregão;
+- semana: preço vs. último fechamento antes da segunda-feira da semana do último pregão;
+- mês:    preço vs. último fechamento antes do dia 1º do mês do último pregão.
+"""
 
 from __future__ import annotations
 
 import os
 import re
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 
 from collector import config
-from collector.comum import ColetaErro, Resultado, arredondar, get, iso, sessao
+from collector.comum import TZ, ColetaErro, Resultado, arredondar, get, iso, sessao
 
-_DIA = 86_400
 _TOKEN_VALIDO = re.compile(r"[A-Za-z0-9._~+/=-]+")
-_TOLERANCIA_30D = 7 * _DIA  # aceita série que começa até 7 dias depois do alvo
+# histórico suficiente para cobrir o fechamento do mês anterior; planos que não
+# liberam 3 meses caem para 1 mês e, por fim, só a cotação
+_RANGES_BRAPI = ("3mo", "1mo", None)
 
 
 class BrapiAutenticacao(ColetaErro):
@@ -63,13 +70,17 @@ def coletar(tickers: list[str] | None = None) -> Resultado:
 
 
 def cotacao_brapi(ticker: str, token: str | None) -> dict:
-    try:
-        resultado = _brapi_get(ticker, token, {"range": "1mo", "interval": "1d"})
-    except BrapiAutenticacao:
-        raise
-    except ColetaErro:
-        # alguns planos não liberam histórico: tenta só a cotação
-        resultado = _brapi_get(ticker, token, {})
+    resultado = None
+    for faixa in _RANGES_BRAPI:
+        params = {"range": faixa, "interval": "1d"} if faixa else {}
+        try:
+            resultado = _brapi_get(ticker, token, params)
+            break
+        except BrapiAutenticacao:
+            raise
+        except ColetaErro:
+            if faixa is None:
+                raise
 
     preco = resultado.get("regularMarketPrice")
     if preco is None:
@@ -81,11 +92,13 @@ def cotacao_brapi(ticker: str, token: str | None) -> dict:
         if p.get("date") and p.get("close") is not None
     ]
     cotado_em = _parse_iso(resultado.get("regularMarketTime"))
+    semana, mes = variacoes_semana_mes(serie, preco, _referencia(cotado_em, serie))
     return _montar(
         ticker,
         preco=preco,
         variacao_dia=resultado.get("regularMarketChangePercent"),
-        variacao_30d=variacao_periodo(serie, preco, _referencia(cotado_em, serie)),
+        variacao_semana=semana,
+        variacao_mes=mes,
         cotado_em=cotado_em,
         fonte="brapi",
     )
@@ -120,7 +133,7 @@ def _brapi_get(ticker: str, token: str | None, params: dict) -> dict:
 def cotacao_yahoo(ticker: str) -> dict:
     dados = get(
         config.YAHOO_CHART_URL.format(ticker=ticker),
-        params={"range": "2mo", "interval": "1d"},
+        params={"range": "3mo", "interval": "1d"},
         headers={"User-Agent": config.YAHOO_USER_AGENT},
     ).json()
     chart = dados.get("chart") or {}
@@ -142,11 +155,13 @@ def cotacao_yahoo(ticker: str) -> dict:
     if variacao_dia is None:
         variacao_dia = _variacao_dia_pela_serie(serie, preco, cotado_em)
 
+    semana, mes = variacoes_semana_mes(serie, preco, _referencia(cotado_em, serie))
     return _montar(
         ticker,
         preco=preco,
         variacao_dia=variacao_dia,
-        variacao_30d=variacao_periodo(serie, preco, _referencia(cotado_em, serie)),
+        variacao_semana=semana,
+        variacao_mes=mes,
         cotado_em=cotado_em,
         fonte="yahoo",
     )
@@ -163,26 +178,34 @@ def _variacao_dia_pela_serie(serie, preco, cotado_em) -> float | None:
 # ---------------------------------------------------------------- cálculo
 
 
-def variacao_periodo(serie: list[tuple[int, float]], preco: float, referencia_ts: int | None, dias: int = 30) -> float | None:
-    """Variação % entre o último fechamento de ~`dias` atrás e o preço atual."""
-    if not serie or referencia_ts is None:
-        return None
-    serie = sorted(serie)
-    alvo = referencia_ts - dias * _DIA
-    anteriores = [c for ts, c in serie if ts <= alvo]
-    if anteriores:
-        base = anteriores[-1]
-    elif serie[0][0] - alvo <= _TOLERANCIA_30D:
-        base = serie[0][1]
-    else:
-        return None
-    return (preco / base - 1) * 100 if base else None
+def variacoes_semana_mes(
+    serie: list[tuple[int, float]], preco: float, referencia: date | None
+) -> tuple[float | None, float | None]:
+    """(semana, mês) em %, relativos à semana e ao mês da data do último pregão."""
+    if not serie or referencia is None:
+        return None, None
+    pontos = sorted((_dia_sp(ts), fechamento) for ts, fechamento in serie)
+    inicio_semana = referencia - timedelta(days=referencia.weekday())
+    inicio_mes = referencia.replace(day=1)
+    return _variacao_desde(pontos, preco, inicio_semana), _variacao_desde(pontos, preco, inicio_mes)
 
 
-def _referencia(cotado_em: datetime | None, serie) -> int | None:
+def _variacao_desde(pontos: list[tuple[date, float]], preco: float, inicio: date) -> float | None:
+    # série que não alcança o período anterior (histórico curto) não gera número
+    anteriores = [fechamento for dia, fechamento in pontos if dia < inicio]
+    if not anteriores or not anteriores[-1]:
+        return None
+    return (preco / anteriores[-1] - 1) * 100
+
+
+def _dia_sp(ts: int) -> date:
+    return datetime.fromtimestamp(ts, tz=timezone.utc).astimezone(TZ).date()
+
+
+def _referencia(cotado_em: datetime | None, serie) -> date | None:
     if cotado_em is not None:
-        return int(cotado_em.timestamp())
-    return max(ts for ts, _ in serie) if serie else None
+        return cotado_em.astimezone(TZ).date()
+    return _dia_sp(max(ts for ts, _ in serie)) if serie else None
 
 
 def _parse_iso(valor) -> datetime | None:
@@ -194,12 +217,13 @@ def _parse_iso(valor) -> datetime | None:
         return None
 
 
-def _montar(ticker, *, preco, variacao_dia, variacao_30d, cotado_em, fonte) -> dict:
+def _montar(ticker, *, preco, variacao_dia, variacao_semana, variacao_mes, cotado_em, fonte) -> dict:
     return {
         "ticker": ticker,
         "preco": arredondar(preco),
         "variacao_dia_pct": arredondar(variacao_dia),
-        "variacao_30d_pct": arredondar(variacao_30d),
+        "variacao_semana_pct": arredondar(variacao_semana),
+        "variacao_mes_pct": arredondar(variacao_mes),
         "cotado_em": iso(cotado_em) if cotado_em else None,
         "fonte": fonte,
     }
@@ -210,7 +234,8 @@ def _cotacao_vazia(ticker: str) -> dict:
         "ticker": ticker,
         "preco": None,
         "variacao_dia_pct": None,
-        "variacao_30d_pct": None,
+        "variacao_semana_pct": None,
+        "variacao_mes_pct": None,
         "cotado_em": None,
         "fonte": None,
     }

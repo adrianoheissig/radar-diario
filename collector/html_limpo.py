@@ -38,7 +38,7 @@ RODAPE_FEED = re.compile(
 RODAPE_MEDIUM = re.compile(r"was originally published in .* on Medium", re.I | re.S)
 
 _PALAVRA = re.compile(r"\w+")
-_BLOCOS = ["p", "figure", "div", "li", "blockquote", "h2", "h3", "h4"]
+_BLOCOS = ["p", "figure", "div", "li", "ul", "ol", "blockquote", "h2", "h3", "h4"]
 
 
 def limpar_conteudo(

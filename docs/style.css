@@ -240,7 +240,8 @@ main {
 }
 
 .tabela-fiis td {
-  padding: 9px 4px;
+  padding: 9px 3px;
+  font-size: 0.95rem;
   text-align: right;
   white-space: nowrap;
   border-top: 1px solid var(--borda);
@@ -250,6 +251,15 @@ main {
 .tabela-fiis td:first-child { text-align: left; }
 
 .tabela-fiis td:first-child a { color: var(--texto); font-weight: 600; }
+
+.legenda {
+  margin: 10px 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--suave);
+}
+
+.legenda b { font-weight: 600; color: var(--texto); }
 
 .positivo { color: var(--positivo); }
 .negativo { color: var(--negativo); }
@@ -269,6 +279,39 @@ main {
   object-fit: cover;
   background: var(--chip-bg);
   border-radius: 10px;
+}
+
+.com-capa { padding-top: 0; overflow: hidden; }
+
+.capa-item {
+  display: block;
+  width: calc(100% + 32px);
+  max-height: 220px;
+  margin: 0 -16px 12px;
+  object-fit: cover;
+  background: var(--chip-bg);
+}
+
+.item-destaque .item-titulo { font-size: 1.15rem; }
+
+.rotulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--link);
+}
+
+.selo {
+  padding: 1px 7px;
+  color: var(--bg);
+  background: var(--destaque);
+  border-radius: 999px;
 }
 
 .item-titulo {

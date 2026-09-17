@@ -21,19 +21,20 @@ MEDIUM_FEED_URL = "https://medium.com/feed/tag/{tag}"
 MEDIUM_POR_TAG = 2
 # Busca o texto completo no feed do autor/publicação (1 requisição extra por feed).
 MEDIUM_TEXTO_COMPLETO = True
+# Mostra só artigos com texto completo (pula os exclusivos para membros / fora do feed do autor).
+MEDIUM_APENAS_TEXTO_COMPLETO = True
 
 # 2. Corrida no Ar
 CORRIDA_NO_AR_URL = "https://corridanoar.com"
 CORRIDA_NO_AR_FEED_PATHS = ["/feed", "/rss", "/feed.xml"]
 CORRIDA_NO_AR_RESUMO_MAX = 280
 
-# 3. InfoMoney FIIs
-# O feed da tag "fundos-imobiliarios" é a fonte principal: a seção
-# "Últimas notícias sobre FIIs" da página de cotações costuma estar desatualizada.
-# A página é usada como fallback (scraping).
-INFOMONEY_FII_FEED = "https://www.infomoney.com.br/tudo-sobre/fundos-imobiliarios/feed/"
-INFOMONEY_FII_URL = "https://www.infomoney.com.br/cotacoes/b3/fii/"
-INFOMONEY_LIMITE = 5
+# 3. InfoMoney: manchetes de capa
+# A capa (home) define a ordem e o destaque; resumo, autor, categorias e matéria
+# completa vêm da página de cada matéria. Se a capa falhar, usa o feed geral.
+INFOMONEY_HOME_URL = "https://www.infomoney.com.br/"
+INFOMONEY_FEED_GERAL = "https://www.infomoney.com.br/feed/"
+INFOMONEY_LIMITE = 10
 INFOMONEY_RESUMO_MAX = 400
 INFOMONEY_MAX_CATEGORIAS = 4
 

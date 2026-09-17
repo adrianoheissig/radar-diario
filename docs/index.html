@@ -68,7 +68,12 @@
           <status-fonte :status="st('fiis')"></status-fonte>
           <table v-if="resumo.fiis.length" class="tabela-fiis">
             <thead>
-              <tr><th>Ticker</th><th>Preço</th><th>Dia</th><th>30d</th></tr>
+              <tr>
+                <th>Ticker</th><th>Preço</th>
+                <th title="Variação do último pregão">Dia ant.</th>
+                <th title="Desde o fechamento da semana anterior">Semana</th>
+                <th title="Acumulado no mês">Mês</th>
+              </tr>
             </thead>
             <tbody>
               <tr v-for="f in resumo.fiis" :key="f.ticker">
@@ -77,17 +82,28 @@
                 </td>
                 <td :title="f.cotado_em ? 'Cotado em ' + formatarDataHora(f.cotado_em) + ' (' + f.fonte + ')' : ''">{{ formatarPreco(f.preco) }}</td>
                 <td :class="classeVariacao(f.variacao_dia_pct)">{{ formatarPct(f.variacao_dia_pct) }}</td>
-                <td :class="classeVariacao(f.variacao_30d_pct)">{{ formatarPct(f.variacao_30d_pct) }}</td>
+                <td :class="classeVariacao(f.variacao_semana_pct)">{{ formatarPct(f.variacao_semana_pct) }}</td>
+                <td :class="classeVariacao(f.variacao_mes_pct)">{{ formatarPct(f.variacao_mes_pct) }}</td>
               </tr>
             </tbody>
           </table>
+          <p v-if="resumo.fiis.length" class="legenda">
+            Preços em R$ do último pregão{{ ultimoPregao ? ' (' + ultimoPregao + ')' : '' }}.
+            <b>Dia ant.</b>: variação no pregão · <b>Semana</b>: desde o fechamento da semana anterior ·
+            <b>Mês</b>: acumulado no mês.
+          </p>
         </section>
 
         <!-- InfoMoney -->
         <section v-if="aba === 'infomoney'" id="painel-infomoney" role="tabpanel" aria-labelledby="aba-infomoney" class="painel">
           <status-fonte :status="st('infomoney_manchetes')"></status-fonte>
-          <article v-for="m in resumo.infomoney_manchetes" :key="m.link" :id="idItem('im', m.link)" class="card item">
-            <img v-if="m.imagem" class="miniatura" :src="m.imagem" alt="" loading="lazy">
+          <article v-for="m in resumo.infomoney_manchetes" :key="m.link" :id="idItem('im', m.link)"
+                   class="card item" :class="{ 'item-destaque': m.destaque, 'com-capa': m.destaque && m.imagem }">
+            <img v-if="m.imagem" :class="m.destaque ? 'capa-item' : 'miniatura'" :src="m.imagem" alt="" loading="lazy">
+            <p v-if="m.destaque || m.secao" class="rotulo">
+              <span v-if="m.destaque" class="selo">Destaque</span>
+              <span v-if="m.secao">{{ m.secao }}</span>
+            </p>
             <h3 class="item-titulo"><a :href="m.link" target="_blank" rel="noopener">{{ m.titulo }}</a></h3>
             <p class="meta">
               <span v-if="m.autor">{{ m.autor }}</span>

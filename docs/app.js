@@ -11,12 +11,13 @@ const ABAS = [
 ];
 const ABA_PADRAO = ABAS[0].id;
 
-const fmtPreco = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+const fmtNumero = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtPct = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: "exceptZero" });
 const fmtData = new Intl.DateTimeFormat("pt-BR", { weekday: "short", day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
 const fmtDataHora = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
 const fmtRelativo = new Intl.RelativeTimeFormat("pt-BR", { numeric: "auto" });
 const fmtDiaSP = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }); // YYYY-MM-DD
+const fmtDiaMes = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "2-digit", timeZone: "America/Sao_Paulo" });
 
 // ---------------------------------------------------------------- sanitização
 
@@ -216,6 +217,12 @@ createApp({
       }
     }
 
+    // data do último pregão das cotações (ex.: "16/09")
+    const ultimoPregao = computed(() => {
+      const datas = (resumo.value?.fiis || []).map((f) => f.cotado_em).filter(Boolean).sort();
+      return datas.length ? fmtDiaMes.format(new Date(datas[datas.length - 1])) : "";
+    });
+
     const tagsMedium = computed(() => [...new Set((resumo.value?.medium || []).map((m) => m.tag))]);
     const mediumFiltrado = computed(() =>
       (resumo.value?.medium || []).filter((m) => !filtroTag.value || m.tag === filtroTag.value)
@@ -281,7 +288,7 @@ createApp({
       return iso ? fmtDataHora.format(new Date(iso)) : "";
     }
     function formatarPreco(v) {
-      return v == null ? "—" : fmtPreco.format(v);
+      return v == null ? "—" : fmtNumero.format(v);
     }
     function formatarPct(v) {
       return v == null ? "—" : `${fmtPct.format(v)}%`;
@@ -302,7 +309,7 @@ createApp({
     return {
       abas: ABAS, aba, barraAbas, resumo, resumoDesatualizado, datas, dataAtual, carregando, erroCarga, tema,
       temMaisAntigo, temMaisNovo, irParaData, mover, selecionarAba, alternarTema, st, contagem,
-      estaAberto, alternar, idItem, filtroTag, tagsMedium, mediumFiltrado, todosMediumAbertos, alternarTodosMedium,
+      estaAberto, alternar, idItem, ultimoPregao, filtroTag, tagsMedium, mediumFiltrado, todosMediumAbertos, alternarTodosMedium,
       formatarData, formatarDataHora, formatarPreco, formatarPct, classeVariacao, tempoRelativo,
     };
   },

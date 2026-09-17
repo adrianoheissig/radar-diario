@@ -8,16 +8,6 @@ from collector.comum import ColetaErro, Resultado, limpar_url
 from collector.fontes import corrida_no_ar, fiis, infomoney, medium
 from collector.html_limpo import limpar_conteudo, minutos_leitura
 
-HTML_INFOMONEY = """
-<section><h2>Mais lidas</h2><h2><a href="/mercados/nao-e-fii/">Fora da seção</a></h2></section>
-<section>
-  <div><h2 class="x">Últimas notícias sobre FIIs</h2></div>
-  <div data-ds-component="card-sm"><h2><a href="https://www.infomoney.com.br/a/">Notícia &quot;A&quot;</a></h2></div>
-  <div data-ds-component="card-sm"><h2><a href="/b/?utm_source=x">Notícia B</a></h2></div>
-  <div data-ds-component="card-sm"><h2><a href="/b/">Notícia B duplicada</a></h2></div>
-</section>
-"""
-
 HOME_CORRIDA = """
 <article class="page"><div class="grid">
   <article class="uagb-post__inner-wrap">
@@ -47,14 +37,6 @@ RSS_CORRIDA = """<?xml version="1.0"?>
 def test_limpar_url_remove_rastreamento():
     url = "https://medium.com/@a/post-123?source=rss------claude-5&utm_medium=rss&id=7"
     assert limpar_url(url) == "https://medium.com/@a/post-123?id=7"
-
-
-def test_infomoney_extrai_apenas_secao_de_fiis_sem_duplicatas():
-    itens = [{"titulo": i["titulo"], "link": i["link"]} for i in infomoney.extrair_manchetes(HTML_INFOMONEY)]
-    assert itens == [
-        {"titulo": 'Notícia "A"', "link": "https://www.infomoney.com.br/a/"},
-        {"titulo": "Notícia B", "link": "https://www.infomoney.com.br/b/"},
-    ]
 
 
 def test_corrida_scraping_pega_primeiro_post_interno():
@@ -106,6 +88,12 @@ RSS_AUTOR = """<?xml version="1.0"?>
 <item><title>Outro</title><link>https://medium.com/@autor/outro-def456</link><guid>https://medium.com/p/def456</guid>
   <content:encoded><![CDATA[<p>Texto completo.</p><img src="https://medium.com/_/stat?event=post" width="1" height="1">]]></content:encoded></item>
 </channel></rss>"""
+
+
+@pytest.fixture(autouse=True)
+def _medium_sem_filtro(monkeypatch):
+    # testes existentes trabalham com itens sem texto completo; o filtro tem teste próprio
+    monkeypatch.setattr(medium.config, "MEDIUM_APENAS_TEXTO_COMPLETO", False)
 
 
 def _feeds_falsos(monkeypatch, feeds):
@@ -161,6 +149,19 @@ def test_medium_busca_texto_completo_no_feed_do_autor(monkeypatch):
     assert requisicoes.count("https://medium.com/feed/@autor") == 1
 
 
+def test_medium_apenas_texto_completo_pula_e_busca_proximo(monkeypatch):
+    monkeypatch.setattr(medium.config, "MEDIUM_APENAS_TEXTO_COMPLETO", True)
+    _feeds_falsos(monkeypatch, {
+        "https://medium.com/feed/tag/a": RSS_MEDIUM,
+        "https://medium.com/feed/@autor": RSS_AUTOR,
+    })
+    # por_tag=2: "Outro" tem texto completo; "Mesmo post" (sem texto) é pulado e não sobra outro
+    resultado = medium.coletar(tags=["a"], por_tag=2)
+    assert [i["titulo"] for i in resultado.dados] == ["Outro"]
+    assert all(i["conteudo_html"] for i in resultado.dados)
+    assert resultado.avisos == ["tag a: só 1 de 2 artigos (1 sem texto completo pulados)"]
+
+
 def test_medium_feed_de_origem():
     assert medium.feed_de_origem("https://medium.com/@joao/post-1") == "https://medium.com/feed/@joao"
     assert medium.feed_de_origem("https://medium.com/javarevisited/post-1") == "https://medium.com/feed/javarevisited"
@@ -180,11 +181,13 @@ RSS_INFOMONEY = """<?xml version="1.0"?>
 </channel></rss>"""
 
 
-def test_infomoney_manchete_com_detalhes():
+def test_infomoney_fallback_feed_geral_com_detalhes():
     item = infomoney.manchete_do_feed(feedparser.parse(RSS_INFOMONEY).entries[0])
     assert item == {
         "titulo": "FII XPML11 aprova emissão",
         "link": "https://www.infomoney.com.br/onde-investir/fii-xpml11/",
+        "destaque": False,
+        "secao": None,
         "resumo": "A oferta será restrita.",
         "autor": "Vinicius Alves",
         "publicado_em": "2026-09-16T12:02:54-03:00",
@@ -198,13 +201,103 @@ def test_infomoney_manchete_com_detalhes():
     }
 
 
-def test_variacao_30d_usa_ultimo_fechamento_antes_do_alvo():
-    dia = 86_400
-    hoje = 1_789_600_000
-    serie = [(hoje - 40 * dia, 90.0), (hoje - 31 * dia, 100.0), (hoje - 29 * dia, 105.0), (hoje, 110.0)]
-    assert fiis.variacao_periodo(serie, 110.0, hoje) == pytest.approx(10.0)
-    # série curta demais (começa 20 dias depois do alvo) não gera número
-    assert fiis.variacao_periodo([(hoje - 10 * dia, 100.0)], 110.0, hoje) is None
+HOME_INFOMONEY = """<html><body>
+<header><div data-ds-component="card-xs"><h2><a href="https://www.infomoney.com.br/menu/">Link do menu fora do main</a></h2></div></header>
+<main>
+  <section>
+    <div data-ds-component="card-headline"><img data-src="https://img/capa.jpg" src="data:,">
+      <h2><a href="https://www.infomoney.com.br/mercados/destaque/?utm_source=home">  Manchete\u00a0principal </a></h2></div>
+    <div data-ds-component="card-xs"><h2><a href="/economia/segunda/">Segunda manchete</a></h2></div>
+    <div data-ds-component="card-horizontal-infoproduct"><h3><a href="/cursos/">Curso gratuito</a></h3></div>
+    <div data-ds-component="ad"><h2><a href="https://anuncio.example/">Anúncio</a></h2></div>
+  </section>
+  <section><h2>Em Alta</h2>
+    <div data-ds-component="card-sm"><h2><a href="https://www.infomoney.com.br/economia/segunda/">Segunda manchete repetida</a></h2></div>
+    <div data-ds-component="card-sm"><h2><a href="https://outro-site.example/x/">Link externo</a></h2></div>
+    <div data-ds-component="card-sm"><h2><a href="https://www.infomoney.com.br/politica/terceira/">Terceira</a></h2></div>
+    <div data-ds-component="card-sm"><h2><a href="https://www.infomoney.com.br/politica/quarta/">Quarta</a></h2></div>
+  </section>
+</main></body></html>"""
+
+MATERIA_INFOMONEY = """<html><head>
+<meta property="og:description" content="Resumo da matéria.">
+<meta property="og:image" content="https://img/og.jpg">
+<meta name="author" content="Lara Rizério">
+<meta property="article:published_time" content="2026-09-17T08:00:00+00:00">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage"},
+  {"@type":"NewsArticle","keywords":["Copom","Reportagem","Juros"],"articleSection":["Economia"]}]}</script>
+</head><body><main><article class="im-article clear-fix">
+  <p>Primeiro parágrafo.</p>
+  <div data-ds-component="ad">Publicidade</div>
+  <div class="cta-middle">Comece agora!</div>
+  <p>Leia também: <a href="/outra/">Outra matéria</a></p>
+  <div class="px-6"><p>Leia também</p><a href="/x/">X</a></div>
+  <ul><li><strong>Fique sabendo antes. </strong><a href="https://lps.infomoney.com.br/infomoney-premium-inscricao/">Assine InfoMoney Premium</a></li></ul>
+  <h2>Intertítulo</h2><p>Segundo parágrafo.</p>
+  <iframe src="https://www.infomoney.com.br/web-stories/x/"></iframe>
+</article></main></body></html>"""
+
+
+def test_infomoney_capa_na_ordem_com_destaque():
+    itens = infomoney.manchetes_da_capa(HOME_INFOMONEY, limite=3)
+    assert [(i["titulo"], i["link"], i["destaque"]) for i in itens] == [
+        ("Manchete principal", "https://www.infomoney.com.br/mercados/destaque/", True),
+        ("Segunda manchete", "https://www.infomoney.com.br/economia/segunda/", False),
+        ("Terceira", "https://www.infomoney.com.br/politica/terceira/", False),
+    ]
+    assert itens[0]["imagem"] == "https://img/capa.jpg"
+    assert infomoney.imagem_leve("https://www.infomoney.com.br/wp-content/uploads/a.jpg?fit=1920%2C1080") == (
+        "https://www.infomoney.com.br/wp-content/uploads/a.jpg?resize=640%2C360&quality=70&strip=all"
+    )
+    assert infomoney.imagem_leve("data:,") is None
+
+
+def test_infomoney_detalhes_da_materia_limpa_anuncios_e_chamadas():
+    detalhes = infomoney.detalhes_da_materia(MATERIA_INFOMONEY, "https://www.infomoney.com.br/economia/x/")
+    assert detalhes == {
+        "resumo": "Resumo da matéria.",
+        "imagem": "https://img/og.jpg",
+        "autor": "Lara Rizério",
+        "publicado_em": "2026-09-17T05:00:00-03:00",
+        "secao": "Economia",
+        "categorias": ["Copom", "Juros"],
+        "conteudo_html": "<p>Primeiro parágrafo.</p>\n<h2>Intertítulo</h2><p>Segundo parágrafo.</p>",
+        "leitura_min": 1,
+    }
+
+
+def test_infomoney_usa_feed_geral_se_capa_falhar(monkeypatch):
+    def get_quebrado(url):
+        raise ColetaErro("HTTP 503")
+
+    monkeypatch.setattr(infomoney, "get", get_quebrado)
+    monkeypatch.setattr(infomoney, "baixar_feed", lambda url: feedparser.parse(RSS_INFOMONEY))
+    resultado = infomoney.coletar(limite=10)
+    assert resultado.origem == "rss feed geral"
+    assert [i["titulo"] for i in resultado.dados] == ["FII XPML11 aprova emissão"]
+    assert resultado.avisos[0] == "capa: HTTP 503"
+
+
+def test_variacoes_semana_e_mes_relativas_ao_ultimo_pregao():
+    from datetime import date, datetime
+
+    def ts(dia):  # fechamento diário no padrão da brapi (00:00 em São Paulo)
+        return int(datetime.fromisoformat(f"{dia}T00:00:00-03:00").timestamp())
+
+    serie = [
+        (ts("2026-08-28"), 80.0),   # sexta: último fechamento de agosto
+        (ts("2026-08-31"), 90.0),   # segunda: último pregão de agosto
+        (ts("2026-09-11"), 100.0),  # sexta: fechamento da semana anterior
+        (ts("2026-09-14"), 104.0),
+        (ts("2026-09-16"), 110.0),  # quarta: último pregão
+    ]
+    # semana: 110 vs. 100 (sexta 11/09); mês: 110 vs. 90 (31/08)
+    semana, mes = fiis.variacoes_semana_mes(serie, 110.0, date(2026, 9, 16))
+    assert semana == pytest.approx(10.0)
+    assert mes == pytest.approx(22.2222, rel=1e-4)
+    # série que não chega ao mês anterior não gera o número do mês
+    assert fiis.variacoes_semana_mes(serie[2:], 110.0, date(2026, 9, 16)) == (pytest.approx(10.0), None)
+    assert fiis.variacoes_semana_mes([], 110.0, date(2026, 9, 16)) == (None, None)
 
 
 def test_fiis_sem_token_cai_no_yahoo_e_desativa_brapi(monkeypatch):
@@ -217,7 +310,7 @@ def test_fiis_sem_token_cai_no_yahoo_e_desativa_brapi(monkeypatch):
     def yahoo(ticker):
         if ticker == "FALHA11":
             raise ColetaErro("fora do ar")
-        return fiis._montar(ticker, preco=10, variacao_dia=1.234, variacao_30d=None, cotado_em=None, fonte="yahoo")
+        return fiis._montar(ticker, preco=10, variacao_dia=1.234, variacao_semana=None, variacao_mes=None, cotado_em=None, fonte="yahoo")
 
     monkeypatch.delenv("BRAPI_TOKEN", raising=False)
     monkeypatch.setattr(fiis, "cotacao_brapi", brapi)
@@ -239,7 +332,7 @@ def test_fiis_token_malformado_nao_chama_brapi(monkeypatch):
     monkeypatch.setattr(fiis, "cotacao_brapi", brapi)
     monkeypatch.setattr(
         fiis, "cotacao_yahoo",
-        lambda t: fiis._montar(t, preco=10, variacao_dia=0, variacao_30d=None, cotado_em=None, fonte="yahoo"),
+        lambda t: fiis._montar(t, preco=10, variacao_dia=0, variacao_semana=None, variacao_mes=None, cotado_em=None, fonte="yahoo"),
     )
     resultado = fiis.coletar(["AAAA11", "BBBB11"])
     assert resultado.origem == "yahoo"
