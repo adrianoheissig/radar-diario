@@ -12,12 +12,13 @@ Cada fonte fica em uma aba. Textos longos abrem e fecham com um botão, sem sair
 Sem backend e sem banco: um script Python roda no GitHub Actions, grava JSON em `docs/data/` e faz commit. O GitHub Pages serve a pasta `docs/`.
 
 ```
-GitHub Actions (cron 06:00 BRT)
-   └─ python collector/main.py
-        ├─ docs/data/resumo-YYYY-MM-DD.json
-        ├─ docs/data/latest.json
-        └─ docs/data/index.json   (lista de datas disponíveis)
-   └─ git commit + push (só se mudou)
+Gatilho diário às 06:00 BRT (cron externo; cron do GitHub como reserva)
+   └─ GitHub Actions
+        ├─ python collector/main.py
+        │    ├─ docs/data/resumo-YYYY-MM-DD.json
+        │    ├─ docs/data/latest.json
+        │    └─ docs/data/index.json   (lista de datas disponíveis)
+        └─ git commit + push (só se mudou)
 GitHub Pages (main /docs)
    └─ index.html + app.js (Vue 3 via CDN) lê os JSONs
 ```
@@ -98,6 +99,43 @@ O cron do GitHub Actions é sempre em **UTC**, e São Paulo é UTC−3 (sem hor�
 - As reservas só coletam se `docs/data/resumo-<hoje>.json` ainda não existir; caso contrário terminam em segundos, sem commit. O disparo manual (*Run workflow*) sempre coleta.
 - Se mesmo assim o resumo do dia não sair, o painel mostra um aviso de que está exibindo o resumo de um dia anterior.
 - Em repositórios públicos, workflows agendados são desativados após 60 dias sem atividade no repositório. Se isso acontecer, reative em *Actions*.
+
+### O agendador do GitHub não é confiável no horário
+
+Na prática, o cron do GitHub tem atrasado muito ou simplesmente não disparado (em 17/09/2026, dos 3 horários só um rodou, e com 4h19 de atraso). Por isso o gatilho no horário vem de um **serviço de cron externo**, que chama a API do GitHub; os crons acima ficam só como reserva.
+
+**1. Criar o token** (uma vez) em <https://github.com/settings/personal-access-tokens/new>:
+
+| Campo | Valor |
+|---|---|
+| Token name | `radar-diario-cron` |
+| Resource owner | `adrianoheissig` |
+| Repository access | *Only select repositories* → `radar-diario` |
+| Permissions → Repository | *Actions*: **Read and write** (o *Metadata: Read* entra sozinho) |
+| Expiration | o prazo que preferir (anote para renovar) |
+
+Guarde o token: ele só aparece uma vez. Ele só serve para disparar workflows deste repositório.
+
+**2. Criar o job** em <https://cron-job.org> (grátis), com *Enable advanced settings*:
+
+| Campo | Valor |
+|---|---|
+| Title | `Radar Diário` |
+| URL | `https://api.github.com/repos/adrianoheissig/radar-diario/actions/workflows/coleta-diaria.yml/dispatches` |
+| Schedule | todos os dias, 06:00, timezone `America/Sao_Paulo` |
+| Request method | `POST` |
+| Request body | `{"ref":"main"}` |
+| Headers | `Accept: application/vnd.github+json`<br>`Authorization: Bearer <SEU_TOKEN>`<br>`Content-Type: application/json`<br>`X-GitHub-Api-Version: 2026-03-10` |
+
+A resposta esperada é **HTTP 200**, sem corpo (a versão antiga `2022-11-28` ainda funciona e responde 204, mas está marcada como *deprecated*, com desligamento em 10/03/2028). O mesmo teste pelo terminal:
+
+```bash
+curl -i -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GITHUB_TOKEN" -H "X-GitHub-Api-Version: 2026-03-10" -d '{"ref":"main"}' https://api.github.com/repos/adrianoheissig/radar-diario/actions/workflows/coleta-diaria.yml/dispatches
+```
+
+As versões disponíveis aparecem em <https://api.github.com/versions>.
+
+Como o disparo externo é `workflow_dispatch`, ele sempre coleta (a regra de "pular se o resumo já existe" vale só para os crons de reserva). Se o token vazar ou expirar, o job passa a receber 401/403: gere outro em *Settings → Developer settings → Personal access tokens* e atualize no cron-job.org.
 
 ## Fontes e fallbacks
 
