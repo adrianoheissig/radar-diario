@@ -1,5 +1,5 @@
 {
-  "gerado_em": "2026-09-18T07:51:02-03:00",
+  "gerado_em": "2026-09-18T07:51:57-03:00",
   "data": "2026-09-18",
   "fiis": [
     {
@@ -368,28 +368,28 @@
       "erro": null,
       "origem": "brapi",
       "avisos": [],
-      "duracao_s": 0.9
+      "duracao_s": 0.89
     },
     "infomoney_manchetes": {
       "ok": true,
       "erro": null,
       "origem": "capa infomoney.com.br",
       "avisos": [],
-      "duracao_s": 1.64
+      "duracao_s": 1.5
     },
     "medium": {
       "ok": true,
       "erro": null,
       "origem": "rss",
       "avisos": [],
-      "duracao_s": 3.03
+      "duracao_s": 2.39
     },
     "corrida_no_ar": {
       "ok": true,
       "erro": null,
       "origem": "feed /feed",
       "avisos": [],
-      "duracao_s": 0.89
+      "duracao_s": 1.17
     }
   }
 }
