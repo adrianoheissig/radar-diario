@@ -65,5 +65,14 @@ jobs:
             exit 0
           fi
           git commit -m "dados: resumo $(TZ=America/Sao_Paulo date +%F)"
-          git pull --rebase --autostash
-          git push
+          # docs/data é sempre regerado: em conflito (duas coletas quase simultâneas)
+          # vence o que acabou de ser coletado. "-X theirs" no rebase = o commit sendo aplicado.
+          for tentativa in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "push falhou (tentativa $tentativa); rebase sobre o remoto"
+            git pull --rebase -X theirs --autostash || { git rebase --abort || true; exit 1; }
+          done
+          echo "não foi possível enviar após 3 tentativas"
+          exit 1
